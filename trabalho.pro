@@ -229,6 +229,18 @@ dividirLista(Fim,[],[],X,Y) :- !.
 palindrome(Lista) :- len(Lista,TamanhoLista),0 is mod(TamanhoLista,2),dividirLista(Lista,Lesquerda,Ldireita),inverter(Ldireita,Ldireitainvertida),compararDuasListas(Lesquerda,Ldireitainvertida),!.
 palindrome(Lista) :- len(Lista,TamanhoLista),1 is mod(TamanhoLista,2),MetadeTamanho is (TamanhoLista + 1)//2,rem_x_at(Lista,MetadeTamanho,ListaSaida),palindrome(ListaSaida),!.
 
+%Predicado que faz o Bubblesort da lista passada
+%bubblesort(ListaEntrada,ListaSaida)
+bubblesort(ListaEntrada,ListaSaida) :- len(ListaEntrada,Tamanho),bubblesort(ListaEntrada,ListaSaida,Tamanho),!.
+bubblesort(ListaEntrada,ListaSaida,X) :- X =< 0,ListaSaida = ListaEntrada,!.
+bubblesort(ListaEntrada,ListaSaida,X) :- bubblesortIteracao(ListaEntrada,ListaIterada),X2 is X - 1,bubblesort(ListaIterada,ListaSaida,X2),!.
+
+%fazer uma iteracao
+bubblesortIteracao([H|[]],[H|[]]) :- !.
+bubblesortIteracao([H,H2|T],[H|T2]) :- H =< H2,bubblesortIteracao([H2|T],T2),!. 
+bubblesortIteracao([H,H2|T],[H2|T2]) :- H > H2,bubblesortIteracao([H|T],T2),!.
+bubblesortIteracao(_,[]) :- write('******TRAP ATIVADA********'),nl,!.
+
 %PREDICADO PARA QUESTAO 1
 %notacao :
 %questao1(E,S).
@@ -264,6 +276,12 @@ questao4([H|T],S) :- rem(H,S,Ret), questao4(T,Ret).
 %EX : questao6([a,n,a]).
 %EX : questao6([a,m,a,n,a,p,l,a,n,a,g,o,d,s,n,a,m,t,a,b,l,e,s,n,i,t,r,a,t,e,t,a,r,t,i,n,s,e,l,b,a,t,m,a,n,s,d,o,g,a,n,a,l,p,a,n,a,m,a]).
 questao6(Lista) :- palindrome(Lista),!.
+
+%PREDICADO PARA QUESTAO 7
+%questao7(ListaEntrada,ListaSaida)
+%Onde ListaEntrada é a lista que deseja ordenar por bubblesort e a ListaSaida e a variavel em aberto que recebera a resposta
+%EX : questao7([-1,-5,-99,5,9,1,0,-3,5])
+questao7(ListaEntrada,ListaSaida) :- bubblesort(ListaEntrada,ListaSaida),!.
 
 
 %fim exercicios

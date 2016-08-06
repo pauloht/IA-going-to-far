@@ -24,3 +24,11 @@ questao 6 feita
 %EX : questao6([a,n,a]).
 %EX : questao6([a,m,a,n,a,p,l,a,n,a,g,o,d,s,n,a,m,t,a,b,l,e,s,n,i,t,r,a,t,e,t,a,r,t,i,n,s,e,l,b,a,t,m,a,n,s,d,o,g,a,n,a,l,p,a,n,a,m,a]).
 questao6(Lista) :- palindrome(Lista),!.
+
+questao 7 feita
+
+%PREDICADO PARA QUESTAO 7
+%questao7(ListaEntrada,ListaSaida)
+%Onde ListaEntrada é a lista que deseja ordenar por bubblesort e a ListaSaida e a variavel em aberto que recebera a resposta
+%EX : questao7([-1,-5,-99,5,9,1,0,-3,5])
+questao7(ListaEntrada,ListaSaida) :- bubblesort(ListaEntrada,ListaSaida),!.
