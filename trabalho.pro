@@ -266,7 +266,7 @@ questao3(H,S) :- uniao(H,S,Resultante), len(H,LenH), len(S, LenS),
 %questao4(Conjunto1,Conjunto2)
 %Dadas dois conjuntos (em forma de listas), retorna se sao iguais ou nao 
 %EX : questao([1,2,3],[3,2,1). = True/Yes
-questao4(H,S) :- len(H, LenH), len(S, LenS), LenH =\= LenS,!, false. %Tamanhos diferentes, forca falso.
+questao4(H,S) :- len(H, LenH), len(S, LenS), LenH =\= LenS,!, 1 == 0. %Tamanhos diferentes, forca falso.
 questao4([],[]) :- !.
 questao4([H|T],S) :- rem(H,S,Ret), questao4(T,Ret).
 
@@ -282,10 +282,5 @@ questao6(Lista) :- palindrome(Lista),!.
 %Onde ListaEntrada é a lista que deseja ordenar por bubblesort e a ListaSaida e a variavel em aberto que recebera a resposta
 %EX : questao7([-1,-5,-99,5,9,1,0,-3,5])
 questao7(ListaEntrada,ListaSaida) :- bubblesort(ListaEntrada,ListaSaida),!.
-
-%PREDICADO PARA QUESTAO 3 ALTERNATIVO REMOVER DEPOIS
-%questao32(Lista1,Lista2)
-questao32(Lista1,Lista2) :- intersecao(Lista1,Lista2,ListaSaida),len(ListaSaida,TamanhoListaSaida),TamanhoListaSaida is 0,!.
-
 
 %fim exercicios
