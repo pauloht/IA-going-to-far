@@ -250,6 +250,14 @@ questao2([1|T],S) :- desbinarizar(T,Resultado),S is (Resultado * -1),!.
 questao3(H,S) :- uniao(H,S,Resultante), len(H,LenH), len(S, LenS),
     			 len(Resultante, LenR), LenR is LenH+LenS.
 
+%PREDICADO PARA QUESTAO4
+%questao4(Conjunto1,Conjunto2)
+%Dadas dois conjuntos (em forma de listas), retorna se sao iguais ou nao 
+%EX : questao([1,2,3],[3,2,1). = True/Yes
+questao4(H,S) :- len(H, LenH), len(S, LenS), LenH =\= LenS,!, false. %Tamanhos diferentes, forca falso.
+questao4([],[]) :- !.
+questao4([H|T],S) :- rem(H,S,Ret), questao4(T,Ret).
+
 %PREDICADO PARA QUESTAO 6
 %questao6(Lista)
 %Onde lista é uma Lista formando a palavra que deseja se verificar se é palindrome, retorna false se nao for,true caso contrario
