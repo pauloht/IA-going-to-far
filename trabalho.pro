@@ -283,5 +283,9 @@ questao6(Lista) :- palindrome(Lista),!.
 %EX : questao7([-1,-5,-99,5,9,1,0,-3,5])
 questao7(ListaEntrada,ListaSaida) :- bubblesort(ListaEntrada,ListaSaida),!.
 
+%PREDICADO PARA QUESTAO 3 ALTERNATIVO REMOVER DEPOIS
+%questao32(Lista1,Lista2)
+questao32(Lista1,Lista2) :- intersecao(Lista1,Lista2,ListaSaida),len(ListaSaida,TamanhoListaSaida),TamanhoListaSaida is 0,!.
+
 
 %fim exercicios
