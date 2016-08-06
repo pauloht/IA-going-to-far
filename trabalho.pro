@@ -189,14 +189,33 @@ binarizar(1,[1|[]]) :- !.
 %caso 4 a entrada é 0
 binarizar(0,[0|[]]) :- !.
 
+%Fazer potencia de um valor
+%pow(A,B,S), potencia de A elevado a B com o resultado em S
+pow(A,0,1) :- !.
+pow(A,1,A) :- !.
+pow(A,B,S) :- B2 is B-1,pow(A,B2,S2),S is S2*A,!.
+pow(A,X,0) :- !.
+
+%Transforma uma sequencia de lista de 0 1(representacao binaria) em um inteiro positivo)
+desbinarizar(Lista,Resultado) :- inverter(Lista,ListaInvertida),desbinarizar(ListaInvertida,0,ResultadoFinal),Resultado is ResultadoFinal.
+desbinarizar([1|[]],Contador,Resultado) :- pow(2,Contador,Saida),Resultado is Saida,!.
+desbinarizar([0|[]],Contador,0) :- !.
+desbinarizar([1|T],Contador,Resultado) :- pow(2,Contador,Saida),Contador2 is Contador+1,desbinarizar(T,Contador2,Resultado2),Resultado is Saida+Resultado2,!.
+desbinarizar([0|T],Contador,Resultado) :- Contador2 is Contador+1,desbinarizar(T,Contador2,Resultado2),Resultado is Resultado2,!.
+
 %PREDICADO PARA QUESTAO 1
 %notacao :
-%questao(E,S).
+%questao1(E,S).
 %onde E é um inteiro e S é o vetor binario representado em sinal magnitude de E.
-questao(E,S) :-  valorAbsoluto(E,EAbsoluto,Sinal),binarizar(EAbsoluto,Lista),inverter(Lista,ListaArrumada),ie(Sinal,ListaArrumada,Respostafinal),S = Respostafinal.
-			
+%EX : questao1(5,S).
+questao1(E,S) :-  valorAbsoluto(E,EAbsoluto,Sinal),binarizar(EAbsoluto,Lista),inverter(Lista,ListaArrumada),ie(Sinal,ListaArrumada,RespostaFinal),S = RespostaFinal,!.
 
-test(A) :- Abacate is 5.
+%PREDICADO PARA QUESTAO 2
+%questao(Lista,Saida)
+%onde Lista é uma lista de 0 e 1 representando um numero binario em sinal magnitude e Saida é um inteiro em aberto equivalente ao valor dado pela lista binaria
+%EX : questao2([1,1,1,0,0,1,1],S).
+questao2([0|T],S) :- (desbinarizar(T,Resultado),S is Resultado),!.
+questao2([1|T],S) :- desbinarizar(T,Resultado),S is (Resultado * -1),!.
 
 
 %fim exercicios
