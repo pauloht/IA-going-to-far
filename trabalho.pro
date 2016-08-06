@@ -196,12 +196,38 @@ pow(A,1,A) :- !.
 pow(A,B,S) :- B2 is B-1,pow(A,B2,S2),S is S2*A,!.
 pow(A,X,0) :- !.
 
+%Predicado que remove X na i-esima posicao da lista
+%rem_x_at(ListaEntrada,Posicao,ListarSaida)
+rem_x_at(L,P,S) :- rem_x_at(L,P,S,1),!.
+rem_x_at([H|T],P,T2,P) :- C2 is P+1,rem_x_at(T,P,T2,C2),!. 
+rem_x_at([H|T],P,[H|T2],C) :- C2 is C+1,rem_x_at(T,P,T2,C2),!.
+rem_x_at([],_,[],_) :- !. 
+
 %Transforma uma sequencia de lista de 0 1(representacao binaria) em um inteiro positivo)
 desbinarizar(Lista,Resultado) :- inverter(Lista,ListaInvertida),desbinarizar(ListaInvertida,0,ResultadoFinal),Resultado is ResultadoFinal.
 desbinarizar([1|[]],Contador,Resultado) :- pow(2,Contador,Saida),Resultado is Saida,!.
 desbinarizar([0|[]],Contador,0) :- !.
 desbinarizar([1|T],Contador,Resultado) :- pow(2,Contador,Saida),Contador2 is Contador+1,desbinarizar(T,Contador2,Resultado2),Resultado is Saida+Resultado2,!.
 desbinarizar([0|T],Contador,Resultado) :- Contador2 is Contador+1,desbinarizar(T,Contador2,Resultado2),Resultado is Resultado2,!.
+
+%Predicado que compara duas listas e retorna true se as listas forem iguais false caso contrario
+%compararDuasListas(Lista1,Lista2).
+compararDuasListas([],[]) :- !.
+compararDuasListas([H|T1],[H|T2]) :- compararDuasListas(T1,T2),!.
+
+%Predicado que pega uma Lista L e divide na metade em duas sub-listas
+%dividirLista(L,L1,L2), L lista entrada L1 lista a esquerda e L2 lista a direita
+%Se a lista tiver tamanho impar o ultimo elemento da lista é ignorado e a lista e divida pelas outras partes igualmente
+dividirLista(L,L1,L2) :- len(L,Tamanho),MetadeTamanho is Tamanho//2,dividirLista(L,L1,L2,MetadeTamanho,0).
+dividirLista([H|T],[H|T2],L2,Metade,Contador) :- Contador < Metade,Contador2 is Contador+1,dividirLista(T,T2,L2,Metade,Contador2),!.
+dividirLista([H|T],L2,[H|T2],Metade,Contador) :- Contador < 2*Metade,Contador2 is Contador+1,dividirLista(T,L2,T2,Metade,Contador2),!.
+dividirLista(Fim,[],[],X,Y) :- !.
+
+%Predicado que diz se uma lista é palindrome, se for S é 1 se nao S é 0.
+%palindrome(Lista,S)
+%Primeiro caso onde Lista é par
+palindrome(Lista) :- len(Lista,TamanhoLista),0 is mod(TamanhoLista,2),dividirLista(Lista,Lesquerda,Ldireita),inverter(Ldireita,Ldireitainvertida),compararDuasListas(Lesquerda,Ldireitainvertida),!.
+palindrome(Lista) :- len(Lista,TamanhoLista),1 is mod(TamanhoLista,2),MetadeTamanho is (TamanhoLista + 1)//2,rem_x_at(Lista,MetadeTamanho,ListaSaida),palindrome(ListaSaida),!.
 
 %PREDICADO PARA QUESTAO 1
 %notacao :
@@ -211,11 +237,18 @@ desbinarizar([0|T],Contador,Resultado) :- Contador2 is Contador+1,desbinarizar(T
 questao1(E,S) :-  valorAbsoluto(E,EAbsoluto,Sinal),binarizar(EAbsoluto,Lista),inverter(Lista,ListaArrumada),ie(Sinal,ListaArrumada,RespostaFinal),S = RespostaFinal,!.
 
 %PREDICADO PARA QUESTAO 2
-%questao(Lista,Saida)
+%questao2(Lista,Saida)
 %onde Lista é uma lista de 0 e 1 representando um numero binario em sinal magnitude e Saida é um inteiro em aberto equivalente ao valor dado pela lista binaria
 %EX : questao2([1,1,1,0,0,1,1],S).
 questao2([0|T],S) :- (desbinarizar(T,Resultado),S is Resultado),!.
 questao2([1|T],S) :- desbinarizar(T,Resultado),S is (Resultado * -1),!.
+
+%PREDICADO PARA QUESTAO 6
+%questao6(Lista)
+%Onde lista é uma Lista formando a palavra que deseja se verificar se é palindrome, retorna false se nao for,true caso contrario
+%EX : questao6([a,n,a]).
+%EX : questao6([a,m,a,n,a,p,l,a,n,a,g,o,d,s,n,a,m,t,a,b,l,e,s,n,i,t,r,a,t,e,t,a,r,t,i,n,s,e,l,b,a,t,m,a,n,s,d,o,g,a,n,a,l,p,a,n,a,m,a]).
+questao6(Lista) :- palindrome(Lista),!.
 
 
 %fim exercicios
