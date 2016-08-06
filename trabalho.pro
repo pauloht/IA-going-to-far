@@ -243,6 +243,13 @@ questao1(E,S) :-  valorAbsoluto(E,EAbsoluto,Sinal),binarizar(EAbsoluto,Lista),in
 questao2([0|T],S) :- (desbinarizar(T,Resultado),S is Resultado),!.
 questao2([1|T],S) :- desbinarizar(T,Resultado),S is (Resultado * -1),!.
 
+%PREDICADO PARA QUESTAO3
+%questao3(Conjunto1,Conjunto2)
+%Dadas dois conjuntos (em forma de listas), retorna se sao disjuntos ou nao 
+%EX : questao3([1,2],[3,4). = True/Yes
+questao3(H,S) :- uniao(H,S,Resultante), len(H,LenH), len(S, LenS),
+    			 len(Resultante, LenR), LenR is LenH+LenS.
+
 %PREDICADO PARA QUESTAO 6
 %questao6(Lista)
 %Onde lista é uma Lista formando a palavra que deseja se verificar se é palindrome, retorna false se nao for,true caso contrario
