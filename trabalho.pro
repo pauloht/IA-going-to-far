@@ -241,6 +241,27 @@ bubblesortIteracao([H,H2|T],[H|T2]) :- H =< H2,bubblesortIteracao([H2|T],T2),!.
 bubblesortIteracao([H,H2|T],[H2|T2]) :- H > H2,bubblesortIteracao([H|T],T2),!.
 bubblesortIteracao(_,[]) :- write('******TRAP ATIVADA********'),nl,!.
 
+%Retorna a lista B, dado a lista A
+%e a definicao da funcao do exercicio
+%USADA PARA O EXERCICIO 5
+calcB([],[]) :- !.
+calcB([H|T],[R0|R]) :- R0 is H*2,
+    				calcB(T,R).
+
+%Resolve a questao5, dadas duas listas nao
+%vazias
+validate([],[]) :- !. %Ambas vazias, true
+validate(H,T) :-len(H,LenH), 
+    			len(T,LenT),
+   				LenH  =\= LenT, 
+   				!, false. %Tamanhos diferentes, false.
+
+validate([H],[T]) :- T is H*2, !.
+validate([H,T|X], [S,R|Y]) :- T is H*6,
+    						S is H*2,
+    						R is S*6,
+    						validate(X,Y).
+
 %PREDICADO PARA QUESTAO 1
 %notacao :
 %questao1(E,S).
@@ -269,6 +290,14 @@ questao3(H,S) :- uniao(H,S,Resultante), len(H,LenH), len(S, LenS),
 questao4(H,S) :- len(H, LenH), len(S, LenS), LenH =\= LenS,!, 1 == 0. %Tamanhos diferentes, forca falso.
 questao4([],[]) :- !.
 questao4([H|T],S) :- rem(H,S,Ret), questao4(T,Ret).
+
+%PREDICADO QUESTAO 5 - DUAS LISTAS NAO VAZIAS
+%Ex.: questao5([2,12,72],[4,24,144]). - Yes/True
+%Ex.: questao5([1,2,3],[1,2,3]). - No/False						
+questao5(H,T) :- validate(H,T).
+%PREDICADO QUESTAO 5 - LISTA R EM ABERTO
+%Ex.: questao5([2,12,72],B). - B=[4,24,144].
+questao5([H,T|X],R) :- calcB([H,T|X], R).
 
 %PREDICADO PARA QUESTAO 6
 %questao6(Lista)
