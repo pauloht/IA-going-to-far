@@ -1,3 +1,7 @@
+%Implementacao da funcao member, ja que estava
+%tendo problemas com a mesma
+member(X, [Y|T]) :- X = Y; member(X, T).
+
 %********************SIMULACAO DE AUTOMATOS DE PILHA******************************
 %Baseado no exemplo de automatos finitos do professor Josue
 
@@ -10,35 +14,40 @@ ie(X,[H|T],[X,H|T]):-!.
 %Pop e o primeiro elemento devem ser iguais
 %Retorna em NovaPilha
 pushpop([], Push, [], [Push]):-!.
-pushpop([], Push, T, NovaPilha) :- ie(Push,T,NovaPilha),!.
-
-%Case: Pop vazio
-pushpop(Pop, Push, H, NovaPilha) :- Pop = '#',
-									ie(Push,H,NovaPilha),!.
-%Case: Push vazio
-pushpop(Pop, Push, [H|T], T) :- Push = '#', !.
-
-%Case: PopPush vazio
-pushpop(Pop, Push, H, H) :- Pop = '#',
-							Push = '#', !.
-
-pushpop(Pop, Push, [Pop|T], NovaPilha) :- ie(Push,T,NovaPilha),!.
+pushpop(Pop, Push, H, H) :- Pop = '#', Push = '#', !. %Case: Pop e Push vazio
+pushpop(Pop, Push, H, NovaPilha) :- Pop = '#', ie(Push,H,NovaPilha),!. %Case: Pop vazio
+pushpop(Pop, Push, [H|T], T) :- Push = '#', Pop = H,!. %Case: Push vazio
+pushpop(Pop, Push, [H|T], NovaPilha) :- Pop = H, ie(Push,T,NovaPilha),!.
 
 %Reconhecimento de cadeias
 re([], Qa, Qa, []) :- !. %Aceitacao: String vazia, estado atual eh final, pilha vazia
+
 re([Head|Tail], Qa, Qr, P) :- 
 	d(Qa, Head, Pop, Q1, Push),
-	write(Pop), nl,
-	write(Push), nl,
+	%write('Pop: '), write(Pop), nl,
+	%write('Push: '), write(Push), nl,
 	pushpop(Pop, Push, P, NovaPilha),
-	write(Head), nl,
-	write(Tail), nl,
-	write(Qa), nl,
-	write(Qr), nl,
-	write(P), nl,
+	%write('Estado Qa: '), write(Qa), nl,
+	%write('Estado q1: '), write(Q1), nl,
+	%write('NPilha: '), write(NovaPilha), nl,
 	re(Tail, Q1, Qr, NovaPilha).
 
-reconhece(X, Qa, F, Qr, P) :- re(X, Qa, Qr, P) , member(Qr, F), nl, write('ACEITA!'), nl, !.
+re(H, Qa, Qr, P) :- %Caso onde ha uma transicao em vazio
+	d(Qa, '#', Pop, Q1, Push),
+	%write('Pop: '), write(Pop), nl,
+	%write('Push: '), write(Push), nl,
+	pushpop(Pop, Push, P, NovaPilha),
+	%write('Estado Qa: '), write(Qa), nl,
+	%write('Estado q1: '), write(Q1), nl,
+	%write('NPilha: '), write(NovaPilha), nl,
+	re(H, Q1, Qr, NovaPilha).
+	
+reconhece(X, Qa, F, Qr, P) :- re(X, Qa, Qr, P),
+							  %write('ACPilha: '), write(P), nl,
+							  %write('Qa: '), write(Qa), nl,
+							  %write('Qf: '), write(Qr), nl,
+							  %write('EstadosFinais: '), write(F), nl,
+							  member(Qr, F), nl, write('ACEITA!'), nl, !.
 %nl--> nova linha no prolog.
 reconhece(X, Qa, F, Qr, P) :- nl, write('RECUSADA!'), nl, !.
 
@@ -56,27 +65,26 @@ define(Q, A, R, Q0, F) :- nl, write('Definicao do automato'), nl,
 			read(F), nl.
 
 %Definicao das transicoes.
-defined :- nl,
-	   write('Entre com as transicoes no formato d(q0, a, P0, q1, P1).'), 
-	   %estado atual, simb, Pop, prox. estado, Push
-	   write('quit encerra:'), nl,
+defined :- nl,                                %estado atual, simb, Pop, prox. estado, Push
+	   write('Entre com as transicoes no formato d(q0, a, P0, q1, P1).'), nl,
+	   write('O caracter # eh o vazio.'), write('quit encerra:'), nl,
 	   repeat,
 		read(B),
 		assert(B),
-	   B == quit.
-
+	   B == quit. 
+	 
 %PROGRAMA PRINCIPAL
-a :- nl, nl, nl,
-     write('Implementacao de AP!'), nl,
-     %retractall(d(_,_,_)),
-     define(Q, A, R, Q0, F),
-     defined, 
-     repeat,
+a :- write('Implementacao de AP!'), nl,
+    %retractall(d(_,_,_)),
+    define(Q, A, R, Q0, F),
+    defined, 
+    repeat,
 	write('Entre com a cadeia (quit encerra):'),
 	read(X),
-	reconhece(X, Q0, F, Qr, P), nl, %X:string Q0:ini F:listaFinais Qr:UmDosFinais P:pilha
+	reconhece(X, Q0, F, Qr, P), nl, 
+	%X:string Q0:ini F:listaFinais Qr:UmDosFinais P:pilha
      X == quit,
-     write('FIM DE PROGRAMA!!!').
+     write('FIM DE PROGRAMA!!!'),nl.
 	 
  %Exemplo: linguagem: a^ib^i |i>=0
  % M=({1,2},{a,b},X,Sigma,1,{1,2})
@@ -84,17 +92,17 @@ a :- nl, nl, nl,
  % Sigma(1,b,Lamba)=[2,Lamba]
  % Sigma(2,b,x)=[2,Lamba]
  
- %TESTE -> em ordem de insercao
+ %TESTE -> em ordem de insercao  --- # eh lambda
  %[1,2].
- %[a,b].
- %X.
+ %['a','b'].
+ %'X'.
  %1.
  %[1,2].
- %d(1,a,'#',1,X).     # eh Lamba
- %d(1,b,'#',2,'#').
- %d(2,b,X,2,'#').
+ %d(1,'a','#',1,'X').
+ %d(1,'b','X',2,'#').
+ %d(2,'b','X',2,'#').
  %quit.
- %[a,a,b,b].
+ %['a','a','b','b'].
  %quit.
  
  %Deverao ser as computacoes: {Estado, string, pilha}
