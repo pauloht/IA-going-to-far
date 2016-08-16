@@ -1,6 +1,8 @@
-%Implementacao da funcao member, ja que estava
-%tendo problemas com a mesma
+%Funcao member. Retorna true se X e membro de uma lista
+%Uso: member(X, Lista).
 member(X, [Y|T]) :- X = Y; member(X, T).
+%Implementacao da funcao member, ja que estava
+%tendo problemas com a padrao
 
 %********************SIMULACAO DE AUTOMATOS DE PILHA******************************
 %Baseado no exemplo de automatos finitos do professor Josue
