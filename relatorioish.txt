@@ -1,0 +1,77 @@
+questao 1 feita.
+
+%PREDICADO PARA QUESTAO 1
+%notacao :
+%questao1(E,S).
+%onde E é um inteiro e S é o vetor binario representado em sinal magnitude de E.
+%EX : questao1(5,S).
+questao1(E,S) :-  valorAbsoluto(E,EAbsoluto,Sinal),binarizar(EAbsoluto,Lista),inverter(Lista,ListaArrumada),ie(Sinal,ListaArrumada,RespostaFinal),S = RespostaFinal,!.
+
+questao 2 feita.
+
+%PREDICADO PARA QUESTAO 2
+%questao2(Lista,Saida)
+%onde Lista é uma lista de 0 e 1 representando um numero binario em sinal magnitude e Saida é um inteiro em aberto equivalente ao valor dado pela lista binaria
+%EX : questao2([1,1,1,0,0,1,1],S).
+questao2([0|T],S) :- (desbinarizar(T,Resultado),S is Resultado),!.
+questao2([1|T],S) :- desbinarizar(T,Resultado),S is (Resultado * -1),!.
+
+%PREDICADO PARA QUESTAO3
+%questao3(Conjunto1,Conjunto2)
+%Dadas dois conjuntos (em forma de listas), retorna se sao disjuntos ou nao 
+%EX : questao3([1,2],[3,4]). = True/Yes
+questao3(H,S) :- not(eConjunto(H)),
+				  write('Solucao funciona apenas para CONJUNTOS!'),!.
+questao3(H,S) :- not(eConjunto(S)),
+				  write('Solucao funciona apenas para CONJUNTOS!'),!.
+questao3(H,S) :- uniao(H,S,Resultante), len(H,LenH), len(S, LenS),
+    			 len(Resultante, LenR), LenR is LenH+LenS.
+
+%PREDICADO PARA QUESTAO4
+%questao4(Conjunto1,Conjunto2)
+%Dadas dois conjuntos (em forma de listas), retorna se sao iguais ou nao 
+%EX : questao4([1,2,3],[3,2,1]). = True/Yes
+questao4(H,S) :- len(H, LenH), len(S, LenS), LenH =\= LenS,!, 1 == 0. %Tamanhos diferentes, forca falso.
+questao4([],[]) :- !.
+questao4([H|T],S) :- rem(H,S,Ret), questao4(T,Ret).
+
+%PREDICADO QUESTAO 5 - DUAS LISTAS NAO VAZIAS
+%Ex.: questao5([2,12,72],[4,24,144]). - Yes/True
+%Ex.: questao5([1,2,3],[1,2,3]). - No/False						
+questao5(H,T) :- validate(H,T).
+%PREDICADO QUESTAO 5 - LISTA R EM ABERTO
+%Ex.: questao5([2,12,72],B). - B=[4,24,144].
+questao5([H,T|X],R) :- calcB([H,T|X], R).
+
+questao 6 feita
+
+%PREDICADO PARA QUESTAO 6
+%questao6(Lista)
+%Onde lista é uma Lista formando a palavra que deseja se verificar se é palindrome, retorna false se nao for,true caso contrario
+%EX : questao6([a,n,a]).
+%EX : questao6([a,m,a,n,a,p,l,a,n,a,g,o,d,s,n,a,m,t,a,b,l,e,s,n,i,t,r,a,t,e,t,a,r,t,i,n,s,e,l,b,a,t,m,a,n,s,d,o,g,a,n,a,l,p,a,n,a,m,a]).
+questao6(Lista) :- palindrome(Lista),!.
+
+questao 7 feita
+
+%PREDICADO PARA QUESTAO 7
+%questao7(ListaEntrada,ListaSaida)
+%Onde ListaEntrada é a lista que deseja ordenar por bubblesort e a ListaSaida e a variavel em aberto que recebera a resposta
+%EX : questao7([-1,-5,-99,5,9,1,0,-3,5])
+questao7(ListaEntrada,ListaSaida) :- bubblesort(ListaEntrada,ListaSaida),!.
+
+%PREDICADO PARA QUESTAO 8
+% Questao de simulacao de automato de pilha. As entradas sao digitadas
+%de mesma maneita do automato passado em aula. Ha um caso de teste abaixo.
+%retractall estava dando problemas, entao o mesmo foi comentado.
+questao8 :- write('Implementacao de AP para a questao 8!'), nl,
+    %retractall(d(_,_,_)),
+    define(Q, A, R, Q0, F),
+    defined, 
+    repeat,
+	write('Entre com a cadeia (quit encerra):'),
+	read(X),
+	reconhece(X, Q0, F, Qr, P), nl, 
+	%X:string Q0:ini F:listaFinais Qr:UmDosFinais P:pilha
+     X == quit,
+     write('FIM DE PROGRAMA!!!'),nl.
