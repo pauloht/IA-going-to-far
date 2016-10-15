@@ -5,6 +5,7 @@
  */
 package buscas;
 
+import mapa.Mapa;
 import mapa.No;
 
 /**
@@ -16,11 +17,14 @@ public abstract class Busca {
     int idAlvo = -1;
     
     No noAtual = null;
+    
+    Mapa mapa = null;
 
-    public Busca(int inicio,int alvo)
+    public Busca(int inicio,int alvo,Mapa mapa)
     {
         idInicio = inicio;
         idAlvo = alvo;
+        this.mapa = mapa;
     }
     
     public int getIdInicio() {
@@ -37,6 +41,15 @@ public abstract class Busca {
 
     public void setIdAlvo(int idAlvo) {
         this.idAlvo = idAlvo;
+    }
+    
+    public int nosVisitados()
+    {
+        if (mapa == null)
+        {
+            return (-1);
+        }
+        return (mapa.nosVisitados());
     }
     
     abstract public void iniciarBusca(No inicio);

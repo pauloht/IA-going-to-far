@@ -124,5 +124,25 @@ public class Mapa {
         return colunas;
     }
     
+    public int nosVisitados()
+    {
+        int contador = 0;
+        for (int i=0;i<linhas;i++)
+        {
+            
+            for (int j=0;j<colunas;j++)
+            {
+                
+                No atual = matriz[i][j];
+                if (atual.isVisitado())
+                {
+                    contador++;
+                }
+            }
+            
+        }
+        return(contador);
+    }
+    
     
 }

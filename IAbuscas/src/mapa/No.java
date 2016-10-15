@@ -96,6 +96,20 @@ public class No {
         return(sb.toString());
     }
     
+    public int custoDoCaminho()
+    {
+        int custo = 0;
+        No atual = this;
+        custo = custo + atual.tipo.getCusto();
+        while (atual.getPai()!=null)
+        {
+            atual = atual.getPai();
+            custo = custo + atual.tipo.getCusto();
+        }
+        custo = custo - atual.tipo.getCusto();
+        return(custo);
+    }
+    
     public void printMe()
     {
         No atual = this;

@@ -38,7 +38,7 @@ public class CriadorBusca {
         }
        
         
-        Busca busca = new BuscaProfundidade(idInicio,idFim);
+        Busca busca = new BuscaProfundidade(idInicio,idFim,mapa);
         busca.iniciarBusca(inicio);
         
         //System.out.println("Qual o tipo de busca?");

@@ -27,7 +27,7 @@ public class CriadorMapa {
             for (int j=0;j<n_colunas;j++)
             {
                 
-                tipo[i][j] = Terreno.PLANO;
+                tipo[i][j] = Terreno.LAVA;
                 
             }
             

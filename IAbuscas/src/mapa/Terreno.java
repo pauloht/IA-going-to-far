@@ -21,7 +21,7 @@ public enum Terreno {
         switch(this)
         {
             case INVALIDO :
-                return(-1);
+                throw new IllegalArgumentException("Caso invalido");
             case PLANO :
                 return(1);
             case MONTANHOSO :

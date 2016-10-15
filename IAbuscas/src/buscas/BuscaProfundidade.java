@@ -8,6 +8,7 @@ import evento.Evento;
 import mapa.No;
 import controle.Controle;
 import evento.TipoDeEvento;
+import mapa.Mapa;
 /**
  *
  * @author FREE
@@ -15,8 +16,8 @@ import evento.TipoDeEvento;
 public class BuscaProfundidade extends Busca{
     Evento evt;
 
-    public BuscaProfundidade(int inicio, int alvo) {
-        super(inicio, alvo);
+    public BuscaProfundidade(int inicio, int alvo,Mapa mapa) {
+        super(inicio, alvo, mapa);
     }
     
     @Override
@@ -70,7 +71,7 @@ public class BuscaProfundidade extends Busca{
         if (fim)
         {
             evt.setEstado(TipoDeEvento.ACHOU);
-            evt.setMsg("Busca encontrou alvo! Caminho : " + noAtual.caminhoAteEsseNo());
+            evt.setMsg("Busca encontrou alvo! Caminho : " + noAtual.caminhoAteEsseNo() + "\nNos Visitados : " + Integer.toString( this.nosVisitados() ) + "\nCusto : " + Integer.toString( noAtual.custoDoCaminho() ));
         }
         else if (!backtrack)
         {
