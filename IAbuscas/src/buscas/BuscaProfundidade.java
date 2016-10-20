@@ -8,7 +8,10 @@ import evento.Evento;
 import mapa.No;
 import controle.Controle;
 import evento.TipoDeEvento;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mapa.Mapa;
+import view.percursoFrame;
 /**
  *
  * @author FREE
@@ -22,12 +25,19 @@ public class BuscaProfundidade extends Busca{
     
     @Override
     public void iniciarBusca(No inicio) {
+       System.out.println("tentando deixar visualização visivel=true");
+       percursoFrame.getInstance().setVisible(true);
        evt = new Evento(this);
        evt.setMsg("Iniciando busca" + "... iniciando no nó " + Integer.toString(inicio.getId()));
        evt.setEstado(TipoDeEvento.PROCURANDO);
+       evt.setId(inicio.getId());
        noAtual = inicio;
        noAtual.quebrarConexoes();
-       Controle.lidarComEvento(evt);
+        try {
+            Controle.lidarComEvento(evt);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BuscaProfundidade.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     @Override
@@ -68,6 +78,7 @@ public class BuscaProfundidade extends Busca{
             backtrack = true;
             noAtual = noAtual.getPai();
         }
+        evt.setId(noAtual.getId());
         if (fim)
         {
             evt.setEstado(TipoDeEvento.ACHOU);
@@ -81,7 +92,11 @@ public class BuscaProfundidade extends Busca{
         {
             evt.setMsg("Realizando backtracking para nó " + Integer.toString(noAtual.getId()));
         }
-        Controle.lidarComEvento(evt);
+        try {
+            Controle.lidarComEvento(evt);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BuscaProfundidade.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }

@@ -19,6 +19,11 @@ public class Evento {
      */
     Busca chamador;
     
+    /**
+     * Id da celula
+     */
+    int id;
+    
     String msg;
     
     public Evento(Busca chamador)
@@ -48,6 +53,14 @@ public class Evento {
 
     public void setEstado(TipoDeEvento estado) {
         this.estado = estado;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
     
     

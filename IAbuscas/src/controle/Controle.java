@@ -7,16 +7,29 @@ package controle;
 
 import evento.Evento;
 import evento.TipoDeEvento;
+import java.util.Observable;
+import java.util.concurrent.TimeUnit;
+import view.ViewThread;
 
 /**
  *
  * @author FREE
  */
-public class Controle {
-    public static void lidarComEvento(Evento evt)
+public class Controle extends Observable{
+    private static Controle instancia = new Controle();
+    
+    public Controle()
     {
+        addObserver(ViewThread.getInstancia());
+    }
+    
+    public static void lidarComEvento(Evento evt) throws InterruptedException
+    {
+        TimeUnit.SECONDS.sleep(1);
         if (evt.getChamador()!=null)
         {
+            instancia.setChanged();
+            instancia.notifyObservers(evt);
             System.out.println(evt.getMsg());
             if (evt.getEstado()==TipoDeEvento.PROCURANDO)
             {

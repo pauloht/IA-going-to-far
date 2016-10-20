@@ -6,6 +6,7 @@
 package mapa;
 
 import java.util.Scanner;
+import view.percursoFrame;
 
 /**
  *
@@ -33,6 +34,9 @@ public class CriadorMapa {
             
         }
         Mapa retorno = new Mapa(n_linhas,n_colunas,tipo);
+        
+        percursoFrame.setInstanceDim(retorno);
+        
         return(retorno);
     }
 }
