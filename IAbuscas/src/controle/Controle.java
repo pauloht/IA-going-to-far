@@ -7,8 +7,10 @@ package controle;
 
 import evento.Evento;
 import evento.TipoDeEvento;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Observable;
-import java.util.concurrent.TimeUnit;
+import javax.swing.Timer;
 import view.ViewThread;
 
 /**
@@ -25,20 +27,28 @@ public class Controle extends Observable{
     
     public static void lidarComEvento(Evento evt) throws InterruptedException
     {
-        TimeUnit.SECONDS.sleep(1);
-        if (evt.getChamador()!=null)
-        {
-            instancia.setChanged();
-            instancia.notifyObservers(evt);
-            System.out.println(evt.getMsg());
-            if (evt.getEstado()==TipoDeEvento.PROCURANDO)
-            {
-                evt.getChamador().continuar();
-            }
-            else
-            {
-                System.out.println("fim busca!");
-            }
-        }
+        final Timer timer = new Timer(1000, null);
+        timer.addActionListener(new ActionListener() {
+                        int contador = 0;
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            if (evt.getChamador()!=null)
+                            {
+                                instancia.setChanged();
+                                instancia.notifyObservers(evt);
+                                System.out.println(evt.getMsg());
+                                if (evt.getEstado()==TipoDeEvento.PROCURANDO)
+                                {
+                                    evt.getChamador().continuar();
+                                }
+                                else
+                                {
+                                    System.out.println("fim busca!");
+                                }
+                            }
+                            timer.stop();
+                        }
+                    });
+        timer.start();
     }
 }

@@ -14,7 +14,50 @@ public class Mapa {
     int linhas;
     int colunas;
     
-    Mapa(int linhas,int colunas,Terreno[][] tipo)
+    public Mapa(int linhas,int colunas)
+    {
+        this.linhas = linhas;
+        this.colunas = colunas;
+        matriz = new No[linhas][colunas];
+        for (int i=0;i<linhas;i++)
+        {
+            for (int j=0;j<colunas;j++)
+            {
+                
+                matriz[i][j] = new No(Terreno.PLANO, i*colunas + j);
+                
+            }
+        }
+        
+        for (int i=0;i<linhas;i++)
+        {
+            for (int j=0;j<colunas;j++)
+            {
+                
+                No local = matriz[i][j];
+                
+                if ( i>0 )//tem norte
+                {
+                    local.setNorte( matriz[i-1][j] );
+                }
+                if ( i<linhas-1 )//tem sul
+                {
+                    local.setSul( matriz[i+1][j]);
+                }
+                if ( j>0 )//tem oeste
+                {
+                    local.setOeste( matriz[i][j-1]);
+                }
+                if ( j<colunas-1 )//tem leste
+                {
+                    local.setLeste( matriz[i][j+1]);
+                }
+                
+            }
+        }
+    }
+    
+    public Mapa(int linhas,int colunas,Terreno[][] tipo)
     {
         this.linhas = linhas;
         this.colunas = colunas;
@@ -57,6 +100,17 @@ public class Mapa {
         }
     }
 
+    public No getNoFromId(int id)
+    {
+        if (id < 0 || id >= linhas*colunas)
+        {
+            return(null);
+        }
+        int linhaRelacionada = (id-id%colunas)/colunas;
+        int colunaRelacionada = id%colunas;
+        return(matriz[linhaRelacionada][colunaRelacionada]);
+    }
+    
     public void printMe(){
         for (int i=0;i<linhas;i++)
         {

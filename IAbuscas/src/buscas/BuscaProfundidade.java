@@ -11,7 +11,7 @@ import evento.TipoDeEvento;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mapa.Mapa;
-import view.percursoFrame;
+import view.PercursoFrame;
 /**
  *
  * @author FREE
@@ -24,14 +24,16 @@ public class BuscaProfundidade extends Busca{
     }
     
     @Override
-    public void iniciarBusca(No inicio) {
+    public void iniciarBusca() {
        System.out.println("tentando deixar visualização visivel=true");
-       percursoFrame.getInstance().setVisible(true);
+       PercursoFrame.getInstance().setVisible(true);
+       noAtual = mapa.getNoFromId(idInicio);
+       
        evt = new Evento(this);
-       evt.setMsg("Iniciando busca" + "... iniciando no nó " + Integer.toString(inicio.getId()));
+       evt.setMsg("Iniciando busca" + "... iniciando no nó " + Integer.toString(noAtual.getId()));
        evt.setEstado(TipoDeEvento.PROCURANDO);
-       evt.setId(inicio.getId());
-       noAtual = inicio;
+       evt.setId(noAtual.getId());
+       
        noAtual.quebrarConexoes();
         try {
             Controle.lidarComEvento(evt);

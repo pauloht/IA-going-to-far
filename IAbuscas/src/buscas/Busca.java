@@ -52,7 +52,7 @@ public abstract class Busca {
         return (mapa.nosVisitados());
     }
     
-    abstract public void iniciarBusca(No inicio);
+    abstract public void iniciarBusca();
     
     abstract public void continuar();
 }
