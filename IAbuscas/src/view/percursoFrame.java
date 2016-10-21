@@ -31,10 +31,10 @@ import mapa.No;
  *
  * @author FREE
  */
-public class percursoFrame extends javax.swing.JFrame {
+public class PercursoFrame extends javax.swing.JFrame {
     List< JPanel > mapaPanel = new ArrayList<>();
     List< JLabel > mapaLabel = new ArrayList<>();
-    private static percursoFrame instancia = null;
+    private static PercursoFrame instancia = null;
     /**
      * Creates new form percursoFrame
      */
@@ -42,12 +42,12 @@ public class percursoFrame extends javax.swing.JFrame {
     private Color bufferColor;
     private JPanel selecionado = null;
     
-    private percursoFrame(Mapa mapa) {
+    PercursoFrame(Mapa mapa) {
         initComponents();
         meuInit(mapa);
     }
     
-    public static percursoFrame getInstance()
+    public static PercursoFrame getInstance()
     {
         if (instancia == null)
         {
@@ -58,34 +58,48 @@ public class percursoFrame extends javax.swing.JFrame {
     
     private void fullScreen()
     {
-        //hard code, uma hora eu conserto
-        getContentPane().setPreferredSize( Toolkit.getDefaultToolkit().getScreenSize());
+        //+ soft code o maximo possivel :p, só mexer nos 2 pesos que deve tudo se ajeitar;
+        float upperPaneSize = 0.1f;//peso do painel de cima
+        
+        float bottomPaneSize = 0.1f;//peso painel de baixo
+        
+        float middlePaneSize = 1.0f - upperPaneSize - bottomPaneSize;//peso painel do meio
+        
+        //aqui começa bruxaria
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setPreferredSize( dim );
         pack();
+        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
         setResizable(false);
         this.toFront();
         
-        int upperPaneSize = 10;
-        
-        int bottomPaneSize = 10;
-        
-        int middlePaneSize = 100 - upperPaneSize - bottomPaneSize;
         
         int totalHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
         
         int totalWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
         
-        this.setLayout(null);
-        
-        taMsg.setLocation(0,0);
-        taMsg.setSize(new Dimension(totalWidth,new Double(totalHeight*0.1).intValue()));
-        
-        pDesenho.setLocation(0,taMsg.getSize().height);
-        pDesenho.setSize(new Dimension(totalWidth,new Double(totalHeight*0.8).intValue()));
-        
-        pOptionsPane.setLocation(0,pDesenho.getLocation().y + pDesenho.getSize().height);
-        pOptionsPane.setSize(new Dimension(totalWidth,totalHeight - taMsg.getSize().height - pDesenho.getSize().height));
+        this.setLayout(new GridBagLayout());
         
         GridBagConstraints g = new GridBagConstraints();
+        g.fill = GridBagConstraints.BOTH;
+        g.gridwidth = g.gridheight = 1;
+        g.weightx = 1.0f;
+        
+        g.weighty = upperPaneSize;
+        g.gridx = 0;
+        g.gridy = 0;
+        this.add(pTopPanel,g);
+        
+        g.weighty = middlePaneSize;
+        g.gridx = 0;
+        g.gridy = 1;
+        this.add(pDesenho,g);
+        
+        g.weighty = bottomPaneSize;
+        g.gridx = 0;
+        g.gridy = 2;
+        this.add(pOptionsPane,g);
+        //fim bruxaria
     }
     
     public static void setInstanceDim(Mapa mapa)
@@ -94,7 +108,7 @@ public class percursoFrame extends javax.swing.JFrame {
         {
             instancia.dispose();
         }
-        instancia = new percursoFrame(mapa);
+        instancia = new PercursoFrame(mapa);
         System.out.println("instancia de visualizacao criada!");
         System.out.println("deixando visualização visivel ja...mudar dps");
         instancia.setVisible(true);
@@ -120,22 +134,7 @@ public class percursoFrame extends javax.swing.JFrame {
             
             aux = new JPanel();
             aux.setLayout(new GridLayout(1,1));
-            
-            switch (noRelacionado.getTipo())
-            {
-                case LAVA :
-                    aux.setBackground(Color.RED);
-                    break;
-                case PANTANO :
-                    aux.setBackground(Color.BLUE);
-                    break;
-                case MONTANHOSO :
-                    aux.setBackground(new Color(156, 93, 82));//MARROM
-                    break;
-                case PLANO :
-                    aux.setBackground(Color.GREEN);
-                    break;
-            }
+            aux.setBackground(noRelacionado.getTipo().getColor());
             
             label = new JLabel(Integer.toString(i));
             label.setHorizontalAlignment(SwingConstants.CENTER);
@@ -200,12 +199,13 @@ public class percursoFrame extends javax.swing.JFrame {
             .addGap(0, 213, Short.MAX_VALUE)
         );
 
-        pOptionsPane.setBackground(new java.awt.Color(255, 255, 255));
+        pOptionsPane.setBackground(new java.awt.Color(0, 102, 102));
 
+        jLabel1.setForeground(new java.awt.Color(255, 51, 51));
         jLabel1.setText("Control Label");
 
         btMostrarCell.setSelected(true);
-        btMostrarCell.setText("Mostrar valor de celulas");
+        btMostrarCell.setText("Mostrar ID das celulas");
         btMostrarCell.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btMostrarCellActionPerformed(evt);
@@ -238,6 +238,7 @@ public class percursoFrame extends javax.swing.JFrame {
         pTopPanel.setBackground(new java.awt.Color(51, 255, 51));
 
         taMsg.setEditable(false);
+        taMsg.setBackground(new java.awt.Color(255, 102, 0));
         taMsg.setColumns(20);
         taMsg.setRows(5);
         jScrollPane1.setViewportView(taMsg);
@@ -308,21 +309,22 @@ public class percursoFrame extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(percursoFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PercursoFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(percursoFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PercursoFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(percursoFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PercursoFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(percursoFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PercursoFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 Mapa mapa = CriadorMapa.criarMapa();
-                percursoFrame f = new percursoFrame(mapa);
+                PercursoFrame f = new PercursoFrame(mapa);
                 f.setVisible(true);
                 f.changeCell(0);
                 f.changeCell(1);
