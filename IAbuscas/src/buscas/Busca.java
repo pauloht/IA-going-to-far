@@ -5,6 +5,7 @@
  */
 package buscas;
 
+import controle.Controle;
 import mapa.Mapa;
 import mapa.No;
 
@@ -25,6 +26,7 @@ public abstract class Busca {
         idInicio = inicio;
         idAlvo = alvo;
         this.mapa = mapa;
+        Controle controleNovo = new Controle(this);
     }
     
     public int getIdInicio() {

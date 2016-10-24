@@ -33,9 +33,8 @@ public class ViewThread implements Observer{
             
             //PercursoFrame.getInstance().setVisible(!PercursoFrame.getInstance().isVisible());
             
-            if (evento.getEstado()==TipoDeEvento.PROCURANDO)
+            if (evento.getEstado()==TipoDeEvento.PROCURANDO || evento.getEstado()==TipoDeEvento.ACHOU)
             {
-                System.out.println("oi!");
                 int id = evento.getId();
                 PercursoFrame.getInstance().changeCell(id);
             }

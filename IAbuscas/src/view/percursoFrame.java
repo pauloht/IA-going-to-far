@@ -5,6 +5,7 @@
  */
 package view;
 
+import controle.Controle;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -35,6 +36,9 @@ public class PercursoFrame extends javax.swing.JFrame {
     List< JPanel > mapaPanel = new ArrayList<>();
     List< JLabel > mapaLabel = new ArrayList<>();
     private static PercursoFrame instancia = null;
+    public static boolean autostatus = false;
+    public static int microsegundosdelay = 1000;
+    private static boolean buscaterminou = false;
     /**
      * Creates new form percursoFrame
      */
@@ -45,6 +49,17 @@ public class PercursoFrame extends javax.swing.JFrame {
     PercursoFrame(Mapa mapa) {
         initComponents();
         meuInit(mapa);
+    }
+    
+    public static void buscaTerminou()
+    {
+        buscaterminou = true;
+        if (instancia != null)
+        {
+            instancia.btProximoPasso.setText("Ver caminho");
+            instancia.tbAuto.setSelected(false);
+            instancia.tbAuto.setEnabled(false);
+        }
     }
     
     public static PercursoFrame getInstance()
@@ -98,7 +113,12 @@ public class PercursoFrame extends javax.swing.JFrame {
         g.weighty = bottomPaneSize;
         g.gridx = 0;
         g.gridy = 2;
-        this.add(pOptionsPane,g);
+        this.add(pBottomPane,g);
+        
+        pBottomPane.setLayout(new GridLayout(1,3));
+        pBottomPane.add(pOptions);
+        pBottomPane.add(btProximoPasso);
+        pBottomPane.add(tbAuto);
         //fim bruxaria
     }
     
@@ -119,6 +139,7 @@ public class PercursoFrame extends javax.swing.JFrame {
         int linhas = mapa.getLinhas();
         int colunas = mapa.getColunas();
 
+        tfAutotempo.setText(Integer.toString(microsegundosdelay));
         pDesenho.setLayout(new GridLayout(linhas,colunas,1,1));
         JPanel aux;
         JLabel label;
@@ -146,7 +167,7 @@ public class PercursoFrame extends javax.swing.JFrame {
             
             pDesenho.add(aux);
         }
-        
+        tbAutoActionPerformed(null);
         fullScreen();
         
     }
@@ -177,9 +198,13 @@ public class PercursoFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         pDesenho = new javax.swing.JPanel();
-        pOptionsPane = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        pBottomPane = new javax.swing.JPanel();
+        pOptions = new javax.swing.JPanel();
         btMostrarCell = new javax.swing.JRadioButton();
+        jLabel1 = new javax.swing.JLabel();
+        tfAutotempo = new javax.swing.JTextField();
+        btProximoPasso = new javax.swing.JButton();
+        tbAuto = new javax.swing.JToggleButton();
         pTopPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         taMsg = new javax.swing.JTextArea();
@@ -199,10 +224,9 @@ public class PercursoFrame extends javax.swing.JFrame {
             .addGap(0, 213, Short.MAX_VALUE)
         );
 
-        pOptionsPane.setBackground(new java.awt.Color(0, 102, 102));
+        pBottomPane.setBackground(new java.awt.Color(0, 102, 102));
 
-        jLabel1.setForeground(new java.awt.Color(255, 51, 51));
-        jLabel1.setText("Control Label");
+        pOptions.setBackground(new java.awt.Color(51, 153, 255));
 
         btMostrarCell.setSelected(true);
         btMostrarCell.setText("Mostrar ID das celulas");
@@ -212,27 +236,73 @@ public class PercursoFrame extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout pOptionsPaneLayout = new javax.swing.GroupLayout(pOptionsPane);
-        pOptionsPane.setLayout(pOptionsPaneLayout);
-        pOptionsPaneLayout.setHorizontalGroup(
-            pOptionsPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pOptionsPaneLayout.createSequentialGroup()
-                .addGroup(pOptionsPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pOptionsPaneLayout.createSequentialGroup()
-                        .addGap(153, 153, 153)
-                        .addComponent(jLabel1))
-                    .addGroup(pOptionsPaneLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btMostrarCell)))
-                .addContainerGap(184, Short.MAX_VALUE))
+        jLabel1.setText("Tempo entre passos em ms(auto)");
+
+        tfAutotempo.setText("jTextField1");
+        tfAutotempo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfAutotempoActionPerformed(evt);
+            }
+        });
+        tfAutotempo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfAutotempoKeyPressed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pOptionsLayout = new javax.swing.GroupLayout(pOptions);
+        pOptions.setLayout(pOptionsLayout);
+        pOptionsLayout.setHorizontalGroup(
+            pOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pOptionsLayout.createSequentialGroup()
+                .addGroup(pOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btMostrarCell)
+                    .addGroup(pOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(tfAutotempo, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(0, 32, Short.MAX_VALUE))
         );
-        pOptionsPaneLayout.setVerticalGroup(
-            pOptionsPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pOptionsPaneLayout.createSequentialGroup()
-                .addContainerGap()
+        pOptionsLayout.setVerticalGroup(
+            pOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pOptionsLayout.createSequentialGroup()
                 .addComponent(btMostrarCell)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
-                .addComponent(jLabel1))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tfAutotempo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(30, Short.MAX_VALUE))
+        );
+
+        btProximoPasso.setText("Proximo passo");
+        btProximoPasso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btProximoPassoActionPerformed(evt);
+            }
+        });
+
+        tbAuto.setText("AUTO");
+        tbAuto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tbAutoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pBottomPaneLayout = new javax.swing.GroupLayout(pBottomPane);
+        pBottomPane.setLayout(pBottomPaneLayout);
+        pBottomPaneLayout.setHorizontalGroup(
+            pBottomPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pBottomPaneLayout.createSequentialGroup()
+                .addComponent(pOptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btProximoPasso)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tbAuto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        pBottomPaneLayout.setVerticalGroup(
+            pBottomPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pOptions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btProximoPasso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(tbAuto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pTopPanel.setBackground(new java.awt.Color(51, 255, 51));
@@ -259,7 +329,7 @@ public class PercursoFrame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pDesenho, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(pOptionsPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pBottomPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(pTopPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -269,7 +339,7 @@ public class PercursoFrame extends javax.swing.JFrame {
                 .addGap(0, 0, 0)
                 .addComponent(pDesenho, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(pOptionsPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(pBottomPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -291,6 +361,51 @@ public class PercursoFrame extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_btMostrarCellActionPerformed
+
+    private void tbAutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbAutoActionPerformed
+        // TODO add your handling code here:
+        if (tbAuto.isSelected())
+        {
+            tbAuto.setText("Auto(Ativado)");
+            Controle.getInstancia().proximoPasso();
+        }
+        else
+        {
+            tbAuto.setText("Auto(Desativado)");
+        }
+        autostatus = tbAuto.isSelected();
+        btProximoPasso.setEnabled(!tbAuto.isSelected());
+    }//GEN-LAST:event_tbAutoActionPerformed
+
+    private void btProximoPassoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btProximoPassoActionPerformed
+        // TODO add your handling code here:
+        Controle.getInstancia().proximoPasso();
+    }//GEN-LAST:event_btProximoPassoActionPerformed
+
+    private void tfAutotempoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfAutotempoActionPerformed
+        // TODO add your handling code here:
+        try{
+            int newtempo = Integer.parseInt(tfAutotempo.getText());
+            microsegundosdelay = newtempo;
+        }
+        catch(Exception e)
+        {
+            tfAutotempo.setText(Integer.toString(microsegundosdelay));
+        }
+    }//GEN-LAST:event_tfAutotempoActionPerformed
+
+    private void tfAutotempoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfAutotempoKeyPressed
+        // TODO add your handling code here:
+        try{
+            System.out.println("valor = " + tfAutotempo.getToolTipText());
+            //int newtempo = Integer.parseInt(tfAutotempo.getSelectedText());
+            //microsegundosdelay = newtempo;
+        }
+        catch(Exception e)
+        {
+            tfAutotempo.setText(Integer.toString(microsegundosdelay));
+        }
+    }//GEN-LAST:event_tfAutotempoKeyPressed
 
     /**
      * @param args the command line arguments
@@ -336,11 +451,15 @@ public class PercursoFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton btMostrarCell;
+    private javax.swing.JButton btProximoPasso;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel pBottomPane;
     private javax.swing.JPanel pDesenho;
-    private javax.swing.JPanel pOptionsPane;
+    private javax.swing.JPanel pOptions;
     private javax.swing.JPanel pTopPanel;
     private javax.swing.JTextArea taMsg;
+    private javax.swing.JToggleButton tbAuto;
+    private javax.swing.JTextField tfAutotempo;
     // End of variables declaration//GEN-END:variables
 }

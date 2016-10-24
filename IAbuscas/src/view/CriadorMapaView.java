@@ -6,6 +6,7 @@
 package view;
 
 import buscas.Busca;
+import buscas.BuscaLargura;
 import buscas.BuscaProfundidade;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -104,6 +105,7 @@ public class CriadorMapaView extends javax.swing.JFrame {
     
     private void meuInit(Mapa mapa)
     {
+        rbProfundidade.setSelected(true);
         pMiddle.setLayout(new GridLayout(mapa.getLinhas(),mapa.getColunas(),1,1));
         JPanel aux;
         JLabel label;
@@ -196,10 +198,11 @@ public class CriadorMapaView extends javax.swing.JFrame {
         this.add(pBottom,g);
         
         
-        pBottom.setLayout(new GridLayout(1,4));
+        pBottom.setLayout(new GridLayout(1,5));
         pBottom.add(btLimpar);
         pBottom.add(btSalvar);
         pBottom.add(btVoltar);
+        pBottom.add(pTipoBusca);
         pBottom.add(pBuscarPanel);
         //fim bruxaria
     }
@@ -214,6 +217,7 @@ public class CriadorMapaView extends javax.swing.JFrame {
     private void initComponents() {
 
         bgTerrenos = new javax.swing.ButtonGroup();
+        bgTipoBusca = new javax.swing.ButtonGroup();
         pUpper = new javax.swing.JPanel();
         rbPlano = new javax.swing.JRadioButton();
         rbMontanha = new javax.swing.JRadioButton();
@@ -230,6 +234,11 @@ public class CriadorMapaView extends javax.swing.JFrame {
         tfCelulaFim = new javax.swing.JTextField();
         tfCelulaInicio = new javax.swing.JTextField();
         btVoltar = new javax.swing.JButton();
+        pTipoBusca = new javax.swing.JPanel();
+        rbProfundidade = new javax.swing.JRadioButton();
+        jLabel3 = new javax.swing.JLabel();
+        rbLargura = new javax.swing.JRadioButton();
+        rbAestrela = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -281,7 +290,7 @@ public class CriadorMapaView extends javax.swing.JFrame {
                 .addGroup(pUpperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(rbPantano)
                     .addComponent(rbLava))
-                .addContainerGap(228, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pUpperLayout.setVerticalGroup(
             pUpperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -380,6 +389,47 @@ public class CriadorMapaView extends javax.swing.JFrame {
             }
         });
 
+        pTipoBusca.setBackground(new java.awt.Color(153, 0, 204));
+
+        bgTipoBusca.add(rbProfundidade);
+        rbProfundidade.setText("Profundidade");
+
+        jLabel3.setText("Tipo de busca");
+
+        bgTipoBusca.add(rbLargura);
+        rbLargura.setText("Largura");
+
+        bgTipoBusca.add(rbAestrela);
+        rbAestrela.setText("A*");
+
+        javax.swing.GroupLayout pTipoBuscaLayout = new javax.swing.GroupLayout(pTipoBusca);
+        pTipoBusca.setLayout(pTipoBuscaLayout);
+        pTipoBuscaLayout.setHorizontalGroup(
+            pTipoBuscaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pTipoBuscaLayout.createSequentialGroup()
+                .addComponent(jLabel3)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(pTipoBuscaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pTipoBuscaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(rbProfundidade)
+                    .addComponent(rbLargura)
+                    .addComponent(rbAestrela))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        pTipoBuscaLayout.setVerticalGroup(
+            pTipoBuscaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pTipoBuscaLayout.createSequentialGroup()
+                .addComponent(jLabel3)
+                .addGap(7, 7, 7)
+                .addComponent(rbProfundidade)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(rbLargura)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(rbAestrela)
+                .addContainerGap(10, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout pBottomLayout = new javax.swing.GroupLayout(pBottom);
         pBottom.setLayout(pBottomLayout);
         pBottomLayout.setHorizontalGroup(
@@ -389,7 +439,10 @@ public class CriadorMapaView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btVoltar))
+                    .addGroup(pBottomLayout.createSequentialGroup()
+                        .addComponent(btVoltar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pTipoBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(pBuscarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -403,12 +456,19 @@ public class CriadorMapaView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(pBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(pBottomLayout.createSequentialGroup()
+                        .addComponent(pBuscarPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(40, 40, 40))
+                    .addGroup(pBottomLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btSalvar)
-                        .addGap(52, 52, 52)
-                        .addComponent(btVoltar))
-                    .addComponent(pBuscarPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(40, 40, 40))
+                        .addGroup(pBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pBottomLayout.createSequentialGroup()
+                                .addGap(52, 52, 52)
+                                .addComponent(btVoltar))
+                            .addGroup(pBottomLayout.createSequentialGroup()
+                                .addGap(4, 4, 4)
+                                .addComponent(pTipoBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(11, 11, 11))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -477,7 +537,23 @@ public class CriadorMapaView extends javax.swing.JFrame {
                     @Override
                     public void run()
                     {
-                        Busca busca = new BuscaProfundidade(linhaInicio,linhaFim,mapaCriado);
+                        Busca busca;
+                        if (rbProfundidade.isSelected())
+                        {
+                            busca = new BuscaProfundidade(linhaInicio,linhaFim,mapaCriado);
+                        }
+                        else if (rbLargura.isSelected())
+                        {
+                            busca = new BuscaLargura(linhaInicio,linhaFim,mapaCriado);
+                        }
+                        else if (rbAestrela.isSelected())
+                        {
+                            busca = new BuscaProfundidade(linhaInicio,linhaFim,mapaCriado);
+                        }
+                        else
+                        {
+                            busca = null;
+                        }
                         busca.iniciarBusca();
                     }
                 });
@@ -562,20 +638,26 @@ public class CriadorMapaView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgTerrenos;
+    private javax.swing.ButtonGroup bgTipoBusca;
     private javax.swing.JButton btLimpar;
     private javax.swing.JButton btRealizarBusca;
     private javax.swing.JButton btSalvar;
     private javax.swing.JButton btVoltar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel pBottom;
     private javax.swing.JPanel pBuscarPanel;
     private javax.swing.JPanel pMiddle;
+    private javax.swing.JPanel pTipoBusca;
     private javax.swing.JPanel pUpper;
+    private javax.swing.JRadioButton rbAestrela;
+    private javax.swing.JRadioButton rbLargura;
     private javax.swing.JRadioButton rbLava;
     private javax.swing.JRadioButton rbMontanha;
     private javax.swing.JRadioButton rbPantano;
     private javax.swing.JRadioButton rbPlano;
+    private javax.swing.JRadioButton rbProfundidade;
     private javax.swing.JTextField tfCelulaFim;
     private javax.swing.JTextField tfCelulaInicio;
     // End of variables declaration//GEN-END:variables

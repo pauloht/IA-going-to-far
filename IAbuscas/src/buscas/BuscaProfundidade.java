@@ -18,6 +18,8 @@ import view.PercursoFrame;
  */
 public class BuscaProfundidade extends Busca{
     Evento evt;
+    StringBuilder nosVisitados = null;
+    boolean backtrack = false;
 
     public BuscaProfundidade(int inicio, int alvo,Mapa mapa) {
         super(inicio, alvo, mapa);
@@ -25,12 +27,14 @@ public class BuscaProfundidade extends Busca{
     
     @Override
     public void iniciarBusca() {
-       System.out.println("tentando deixar visualização visivel=true");
+       //System.out.println("tentando deixar visualização visivel=true");
        PercursoFrame.getInstance().setVisible(true);
        noAtual = mapa.getNoFromId(idInicio);
        
+       nosVisitados = new StringBuilder();
+       
        evt = new Evento(this);
-       evt.setMsg("Iniciando busca" + "... iniciando no nó " + Integer.toString(noAtual.getId()));
+       evt.setMsg("Iniciando busca em profundidade" + "... iniciando no nó " + Integer.toString(noAtual.getId()));
        evt.setEstado(TipoDeEvento.PROCURANDO);
        evt.setId(noAtual.getId());
        
@@ -44,8 +48,23 @@ public class BuscaProfundidade extends Busca{
     
     @Override
     public void continuar() {
-        boolean backtrack = false;
+        boolean tempbacktrack;
+        tempbacktrack = backtrack;
+        if (backtrack)
+        {
+            evt.setMsg("Realizando backtracking para nó " + Integer.toString(noAtual.getId()));
+        }
+        backtrack = false;
         boolean fim = false;
+        No proximoNo = null;
+        if (!noAtual.isVisitado())
+        {
+            if (nosVisitados.length() > 0)
+            {
+                nosVisitados.append(',');
+            }
+            nosVisitados.append(Integer.toString( noAtual.getId() ));
+        }
         noAtual.setVisitado(true);
         if (noAtual.getId() == idAlvo)
         {
@@ -54,46 +73,53 @@ public class BuscaProfundidade extends Busca{
         else if (noAtual.getNorte()!=null)
         {
             noAtual.getNorte().setPai(noAtual);
-            noAtual = noAtual.getNorte();
-            noAtual.quebrarConexoes();
+            proximoNo = noAtual.getNorte();
+            proximoNo.quebrarConexoes();
         }
         else if (noAtual.getLeste()!=null)
         {
             noAtual.getLeste().setPai(noAtual);
-            noAtual = noAtual.getLeste();
-            noAtual.quebrarConexoes();
+            proximoNo = noAtual.getLeste();
+            proximoNo.quebrarConexoes();
         }
         else if (noAtual.getSul()!=null)
         {
             noAtual.getSul().setPai(noAtual);
-            noAtual = noAtual.getSul();
-            noAtual.quebrarConexoes();
+            proximoNo = noAtual.getSul();
+            proximoNo.quebrarConexoes();
         }
         else if (noAtual.getOeste()!=null)
         {
             noAtual.getOeste().setPai(noAtual);
-            noAtual = noAtual.getOeste();
-            noAtual.quebrarConexoes();
+            proximoNo = noAtual.getOeste();
+            proximoNo.quebrarConexoes();
         }
         else
         {
             backtrack = true;
-            noAtual = noAtual.getPai();
+            proximoNo = noAtual.getPai();
         }
         evt.setId(noAtual.getId());
-        if (fim)
+        if (!tempbacktrack)
         {
-            evt.setEstado(TipoDeEvento.ACHOU);
-            evt.setMsg("Busca encontrou alvo! Caminho : " + noAtual.caminhoAteEsseNo() + "\nNos Visitados : " + Integer.toString( this.nosVisitados() ) + "\nCusto : " + Integer.toString( noAtual.custoDoCaminho() ));
+            if (noAtual.getId() == idAlvo)
+            {
+                fim = true;
+            }
+            if (fim)
+            {
+                evt.setEstado(TipoDeEvento.ACHOU);
+                evt.setMsg("Visitando nó " + Integer.toString(noAtual.getId()) + " ... Busca encontrou alvo! Caminho : " + noAtual.caminhoAteEsseNo() + "\nNos Visitados : " + Integer.toString( this.nosVisitados() ) + "\nCusto : " + Integer.toString( noAtual.custoDoCaminho() ));
+            }
+            else
+            {
+                evt.setMsg("Visitando nó " + Integer.toString(noAtual.getId()));
+            }
         }
-        else if (!backtrack)
-        {
-            evt.setMsg("Visitando nó " + Integer.toString(noAtual.getId()));
-        }
-        else
-        {
-            evt.setMsg("Realizando backtracking para nó " + Integer.toString(noAtual.getId()));
-        }
+        evt.setMsg(evt.getMsg() + "\nNos visitados : " + nosVisitados.toString());
+        
+        noAtual = proximoNo;
+        
         try {
             Controle.lidarComEvento(evt);
         } catch (InterruptedException ex) {

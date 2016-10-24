@@ -11,5 +11,6 @@ package evento;
  */
 public enum TipoDeEvento {
     PROCURANDO,
-    ACHOU;
+    ACHOU,
+    ERRO;
 }
