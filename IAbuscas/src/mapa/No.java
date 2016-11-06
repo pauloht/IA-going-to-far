@@ -98,6 +98,7 @@ public class No implements Comparable<Object> {
     
     public int custoDoCaminho()
     {
+        System.out.println(this.getPai());
         int custo = 0;
         No atual = this;
         custo = custo + atual.tipo.getCusto();
@@ -287,6 +288,11 @@ public class No implements Comparable<Object> {
     public int compareTo(Object o) {
         No that = (No) o;
         return Integer.compare(this.custoComHeuristica(), that.custoComHeuristica());
+    }
+
+    @Override
+    public String toString() {
+        return "No{" + id + '}';
     }
     
 }

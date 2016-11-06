@@ -9,6 +9,7 @@ import controle.Controle;
 import evento.Evento;
 import evento.TipoDeEvento;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -26,8 +27,8 @@ public class AStar extends Busca{
     Evento evt = null;
     StringBuilder nosVisitados = null;
     
-    HashSet<No> open;
-    HashSet<No> closed; //Visitados
+    HashSet<No> open   = new HashSet();
+    HashSet<No> closed = new HashSet(); //Visitados
     
     private No fim;
     
@@ -47,41 +48,26 @@ public class AStar extends Busca{
         int coluna = mapa.getColunas();
         int linInc=-1;
         int colInc=-1;
+        int countId=0;
         
-        int countId=1;
+        //System.out.println("PARMA: " + idAlvo);
+        OUT:
         for (int i=0; i<linhas; i++){
             for (int j=0; j<coluna; j++){
                 if (countId == idAlvo){
+                    //System.out.println("INSIDE");
                     linInc = i;
                     colInc = j;
-                    break;
+                    break OUT;
                 }
                 countId++;
+                //System.out.println("COUTN: " + countId);
             }
         }
 
-        /*
-        int div;
-        int mod;
-        for (int i=1; i<=linhas; i++){
-            div = i/linhas;
-            mod = i%linhas;
-            if(div==1 && mod==0){
-                linInc = i;
-                break;
-            }
-        }
         
-        for (int i=1; i<=coluna; i++){
-            div = i/coluna;
-            mod = i%coluna;
-            if(div==1 && mod==0){
-                colInc = i;
-                break;
-            }
-        }
-        */
         int[] coords = {linInc, colInc};
+        //System.out.println("ARR: " + Arrays.toString(coords));
         return coords;
     }
     
@@ -166,11 +152,16 @@ public class AStar extends Busca{
         List<No> vizinhos = getNeighbours(noAtual);
         parentNodes(vizinhos, noAtual);
         
+        System.out.println("------------------------REPORT-----------------------");
+        System.out.println("No atual: " + noAtual.getId());
+        System.out.println("NO ATUAL COST: " + noAtual.custoComHeuristica());
+        System.out.println("Vizinhos: " + vizinhos.toString());
+        System.out.println("No fim  : " + fim.getId());
+        System.out.println("OPEN:     " + open.toString());
+        System.out.println("Closed:   " + closed.toString());
+        System.out.println("------------------------END REPORT-----------------------");
+        
         for (No vizinho : vizinhos){
-            if (closed.contains(vizinho)){
-                continue;
-            }
-            
             if (open.contains(vizinho)){
                 //Comparação
                 //Valor do caminho do no atual + terreno do vizinho
@@ -181,15 +172,15 @@ public class AStar extends Busca{
                     vizinho.setPai(noAtual);
             }  
         }
-        
         Collections.sort(vizinhos);
+        System.out.println("SORT");
         open.addAll(vizinhos);
-        
+        System.out.println("COL");
         //NoAtual estiver na vizinhança do final, vai direto, else, menor custo
         if (atualNaVizinhacaDoFinal()){
             fim.setPai(noAtual);
             noAtual = fim;
-            
+            System.out.println("FIM");
             /*
             OPERAÇÕES DE FINALIZAÇÃO
             RETORNAR CAMINHO E O CARALEO 
@@ -199,14 +190,25 @@ public class AStar extends Busca{
             evt.setEstado(TipoDeEvento.ACHOU);
             
         } else {
-            noAtual = vizinhos.get(0);
+            if (vizinhos.isEmpty()){
+                noAtual = vizinhos.get(0);
+            } else {
+                List<No> tempo = new ArrayList(open);
+                Collections.sort(tempo);
+                noAtual = tempo.get(0);
+            }
+            
             
             evt.setId(noAtual.getId());
             evt.setEstado(TipoDeEvento.PROCURANDO);
         }
         
-        evt.setMsg("Visitando nó " + Integer.toString(noAtual.getId()) + "...\n Lista aberta: " + open.toString() + "\nLista fechada: " + closed.toString() + "\n");
-        
+        evt.setMsg("Visitando nó " + Integer.toString(noAtual.getId()) + "...\n Lista aberta: " + open.toString() + "\nLista fechada: " + closed.toString() + "\nCAMINHO: " + noAtual.caminhoAteEsseNo() );
+        //System.out.println("No atual: " + noAtual.getId());
+        //System.out.println("No fim  : " + fim.getId());
+        //System.out.println("OPEN:     " + open.toString());
+        //System.out.println("Closed:   " + closed.toString());
+        System.out.println("BEF:");
         try {
             Controle.lidarComEvento(evt);
         } catch (InterruptedException ex) {
@@ -215,7 +217,7 @@ public class AStar extends Busca{
     }
     
     private boolean atualNaVizinhacaDoFinal(){
-        HashSet<No> vizinhosDoAtual = new HashSet(getNeighbours(noAtual));
+        HashSet<No> vizinhosDoAtual = new HashSet(getAllNeighbours(noAtual));
         
         return vizinhosDoAtual.contains(fim);
     }
@@ -239,10 +241,8 @@ public class AStar extends Busca{
      */
     private List<No> getNeighbours(No atual){
         int[] atualCoords = getCoordinatesFromNode(atual.getId());
-        
         int lin = atualCoords[0];
         int col = atualCoords[1];
-        
         int[][] neighbours = {
             {lin-1, col  }, //North
             //{lin-1, col+1}, //North East
@@ -257,11 +257,43 @@ public class AStar extends Busca{
         List<No> lista = new ArrayList();
         
         No[][] mat = mapa.getMatriz();
-        
+        No local;
         for (int[] coord : neighbours){
             if ( (coord[0]>-1 && coord[0]<mapa.getLinhas()) && 
                  (coord[1]>-1 && coord[1]<mapa.getColunas())   ){
-                lista.add(mat[coord[0]][coord[1]]);
+                local = mat[coord[0]][coord[1]];
+                if (!closed.contains(local))
+                    lista.add(local);
+            }
+        }
+
+        return lista;
+    }
+    
+    private List<No> getAllNeighbours(No atual){
+                int[] atualCoords = getCoordinatesFromNode(atual.getId());
+        int lin = atualCoords[0];
+        int col = atualCoords[1];
+        int[][] neighbours = {
+            {lin-1, col  }, //North
+            //{lin-1, col+1}, //North East
+            {lin  , col+1}, //East
+            //{lin+1, col+1}, //South East
+            {lin+1, col  }, //South
+            //{lin+1, col-1}, //South West
+            {lin  , col-1}, //West
+            //{lin-1, col-1}, //North West
+        };
+        
+        List<No> lista = new ArrayList();
+        
+        No[][] mat = mapa.getMatriz();
+        No local;
+        for (int[] coord : neighbours){
+            if ( (coord[0]>-1 && coord[0]<mapa.getLinhas()) && 
+                 (coord[1]>-1 && coord[1]<mapa.getColunas())   ){
+                local = mat[coord[0]][coord[1]];
+                lista.add(local);
             }
         }
 
