@@ -32,6 +32,8 @@ public class AStar extends Busca{
     
     private No fim;
     
+    private boolean HALT=false;
+    
     /**
      * Dado o id de um nodo, calcula-se
      * a posição no grid (Linha, coluna)
@@ -128,15 +130,26 @@ public class AStar extends Busca{
         PercursoFrame.getInstance().setVisible(true);
         nosVisitados = new StringBuilder();
 
-        evt = new Evento(this);
-        evt.setMsg("Iniciando busca A*... Iniciando no nó " + Integer.toString(noAtual.getId()));
-        evt.setEstado(TipoDeEvento.PROCURANDO);
-        evt.setId(noAtual.getId());
-
-        noAtual.quebrarConexoes();
         if (noAtual == null){
             System.err.println("Nó inicial nulo!");
+            evt = new Evento(this);
+            evt.setMsg("Iniciando busca A*...\n Nó nulo." + Integer.toString(noAtual.getId()));
+            evt.setEstado(TipoDeEvento.ERRO);
+            evt.setId(-1);
+        } else if (noAtual.equals(fim)){
+            evt = new Evento(this);
+            evt.setMsg("Iniciando busca A*...\n Nós inicial e final são iguais... Caminho ''nulo''... " + Integer.toString(noAtual.getId()));
+            evt.setEstado(TipoDeEvento.ACHOU);
+            evt.setId(noAtual.getId());
+            HALT=true;
+        } else {
+            evt = new Evento(this);
+            evt.setMsg("Iniciando busca A*... Iniciando no nó " + Integer.toString(noAtual.getId()));
+            evt.setEstado(TipoDeEvento.PROCURANDO);
+            evt.setId(noAtual.getId());
         }
+        
+        noAtual.quebrarConexoes();
         
         try {
             Controle.lidarComEvento(evt);
@@ -147,6 +160,16 @@ public class AStar extends Busca{
 
     @Override
     public void continuar() {
+        if (HALT){
+            evt.setEstado(TipoDeEvento.ACHOU);
+            try {
+                Controle.lidarComEvento(evt);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(BuscaProfundidade.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return;
+        } //Fail safe
+        
         closed.add(noAtual);
         open.remove(noAtual);
         List<No> vizinhos = getNeighbours(noAtual);
@@ -180,23 +203,20 @@ public class AStar extends Busca{
         if (atualNaVizinhacaDoFinal()){
             fim.setPai(noAtual);
             noAtual = fim;
-            System.out.println("FIM");
-            /*
-            OPERAÇÕES DE FINALIZAÇÃO
-            RETORNAR CAMINHO E O CARALEO 
-            */
             
             evt.setId(noAtual.getId());
             evt.setEstado(TipoDeEvento.ACHOU);
-            
         } else {
-            if (vizinhos.isEmpty()){
+            List<No> tempo = new ArrayList(open);
+            Collections.sort(tempo);
+            noAtual = tempo.get(0);
+            /*if (!vizinhos.isEmpty()){
                 noAtual = vizinhos.get(0);
             } else {
                 List<No> tempo = new ArrayList(open);
                 Collections.sort(tempo);
                 noAtual = tempo.get(0);
-            }
+            }*/
             
             
             evt.setId(noAtual.getId());
