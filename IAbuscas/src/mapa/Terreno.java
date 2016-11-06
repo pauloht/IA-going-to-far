@@ -11,14 +11,73 @@ import java.awt.Color;
  *
  * @author FREE
  */
-public enum Terreno {
-    INVALIDO,
-    PLANO,
-    MONTANHOSO,
-    PANTANO,
-    LAVA;
+public enum Terreno {   
+    //ID, custo, Color
+    INVALIDO  (-1, Integer.MAX_VALUE, Color.MAGENTA),
+    PLANO     ( 1,                 1,     Color.GREEN),
+    MONTANHOSO( 2,                 2,     new Color(156, 93, 82)),
+    PANTANO   ( 3,                 4,     Color.BLUE),
+    LAVA      ( 4,                 8,     Color.RED);
     
-    public int getCusto()
+    private final int ID;
+    private final Color cor;
+    private final int custo;
+    private Terreno(int ID, int custo, Color cor) {
+        this.ID = ID;
+        this.cor = cor;
+        this.custo = custo;
+    }
+    
+    public int getCusto(){
+        if (this.equals(INVALIDO))
+            throw new IllegalArgumentException("Caso invalido");
+        else
+            return custo;
+    }
+    
+    public Color getColor(){
+        if (this.equals(INVALIDO))
+            throw new IllegalArgumentException("Caso invalido");
+        else
+            return cor;
+    }
+    
+    public int getID(){
+        if (this.equals(INVALIDO))
+            throw new IllegalArgumentException("Caso invalido");
+        else
+            return ID;
+    }
+    
+    public static Terreno getTerrenoFromColor(Color color){
+        for (Terreno terreno : Terreno.values()){
+            if (terreno.cor.equals(color)){
+                return terreno;
+            }
+        }
+        
+        throw new IllegalArgumentException("Cor invalida!");
+    }
+    
+    public static Terreno getTerrenoFromID(int id) {  
+        for (Terreno terreno : Terreno.values()){
+            if (terreno.ID == id){
+                return terreno;
+            }
+        }
+        throw new IllegalArgumentException("ID invalido!");
+    }
+}
+ /// Como estava antes, para caso eu explodir algo...
+/*
+    INVALIDO  ,
+    PLANO     ,
+    MONTANHOSO,
+    PANTANO   ,
+    LAVA      ;
+
+
+public int getCusto()
     {
         switch(this)
         {
@@ -122,4 +181,4 @@ public enum Terreno {
             throw new IllegalArgumentException("ID invalido!");
         }
     }
-}
+*/

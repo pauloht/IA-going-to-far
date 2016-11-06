@@ -5,6 +5,7 @@
  */
 package view;
 
+import buscas.AStar;
 import buscas.Busca;
 import buscas.BuscaLargura;
 import buscas.BuscaProfundidade;
@@ -16,7 +17,6 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -548,7 +548,7 @@ public class CriadorMapaView extends javax.swing.JFrame {
                         }
                         else if (rbAestrela.isSelected())
                         {
-                            busca = new BuscaProfundidade(linhaInicio,linhaFim,mapaCriado);
+                            busca = new AStar(linhaInicio,linhaFim,mapaCriado);
                         }
                         else
                         {

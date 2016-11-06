@@ -9,7 +9,7 @@ package mapa;
  *
  * @author FREE
  */
-public class No {
+public class No implements Comparable<Object> {
     No norte = null;
     No sul = null;
     No oeste = null;
@@ -154,6 +154,31 @@ public class No {
             System.out.println(atual.getOeste().getId());
         }
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 83 * hash + this.id;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final No other = (No) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
+    }
     
     //<editor-fold defaultstate="collapsed" desc="coisas basicas">
     
@@ -230,5 +255,38 @@ public class No {
     
     //</editor-fold>
 
+    public int getHeuristicCost() {
+        return heuristicCost;
+    }
+
+    public void setHeuristicCost(int heuristicCost) {
+        this.heuristicCost = heuristicCost;
+    }
+    
+    private int heuristicCost;
+    
+    private int fValue;
+    
+    public int custoComHeuristica(){
+        return custoDoCaminho() + heuristicCost;
+    }
+    
+    public void updateF(){
+        fValue = getFCostForThisNode();
+    }
+    
+    public int getParentCost(){
+        return custoDoCaminho() - tipo.getCusto();
+    }
+    
+    public int getFCostForThisNode(){
+        return heuristicCost + tipo.getCusto();
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        No that = (No) o;
+        return Integer.compare(this.custoComHeuristica(), that.custoComHeuristica());
+    }
     
 }
