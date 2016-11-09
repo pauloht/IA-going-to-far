@@ -15,6 +15,7 @@ import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import mapa.CriadorMapa;
@@ -32,6 +33,7 @@ public class PercursoFrame extends javax.swing.JFrame {
     public static boolean autostatus = false;
     public static int microsegundosdelay = 1000;
     private static boolean buscaterminou = false;
+    Mapa buffer = null;
     /**
      * Creates new form percursoFrame
      */
@@ -42,6 +44,8 @@ public class PercursoFrame extends javax.swing.JFrame {
     PercursoFrame(Mapa mapa) {
         initComponents();
         meuInit(mapa);
+        buffer = mapa;
+        buscaterminou = false;
     }
     
     public static void buscaTerminou()
@@ -49,7 +53,8 @@ public class PercursoFrame extends javax.swing.JFrame {
         buscaterminou = true;
         if (instancia != null)
         {
-            instancia.btProximoPasso.setText("Ver caminho");
+            instancia.btProximoPasso.setText("Sair\n");
+            instancia.btProximoPasso.setEnabled(true);
             instancia.tbAuto.setSelected(false);
             instancia.tbAuto.setEnabled(false);
         }
@@ -372,7 +377,21 @@ public class PercursoFrame extends javax.swing.JFrame {
 
     private void btProximoPassoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btProximoPassoActionPerformed
         // TODO add your handling code here:
-        Controle.getInstancia().proximoPasso();
+        if (!buscaterminou)
+        {
+            Controle.getInstancia().proximoPasso();
+        }
+        else
+        {
+            int i;
+            i = JOptionPane.showConfirmDialog(this, "Deseja voltar ao editor de mapa?", "voltar", JOptionPane.YES_NO_OPTION);
+            if (i == JOptionPane.YES_OPTION)
+            {
+                CriadorMapaView telaDeMapa = new CriadorMapaView(buffer);
+                telaDeMapa.setVisible(true);
+                this.dispose();
+            }
+        }
     }//GEN-LAST:event_btProximoPassoActionPerformed
 
     private void tfAutotempoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfAutotempoActionPerformed
