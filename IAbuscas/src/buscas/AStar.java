@@ -46,6 +46,7 @@ public class AStar extends Busca{
      * @return       Coordenadas de um nodo.
      */
     private int[] getCoordinatesFromNode(int idAlvo){
+        //System.out.println("ID = " + idAlvo);
         int linhas = mapa.getLinhas();
         int coluna = mapa.getColunas();
         int linInc=-1;
@@ -70,6 +71,7 @@ public class AStar extends Busca{
         
         int[] coords = {linInc, colInc};
         //System.out.println("ARR: " + Arrays.toString(coords));
+        //System.out.println("SAIDA : " + Arrays.toString(coords));
         return coords;
     }
     
@@ -106,10 +108,11 @@ public class AStar extends Busca{
         
         int linhas = mapa.getLinhas();
         int coluna = mapa.getColunas();
-        int countId=1;
+        int countId=0;
         for (int i=0; i<linhas; i++){
             for (int j=0; j<coluna; j++){
                 int[] actualCoords = getCoordinatesFromNode(countId);
+                //System.out.println("i = " + i + ", j = " + j + ", " + Arrays.toString(actualCoords));
                 matrisNos[i][j].setHeuristicCost(
                         manhattanDistance(actualCoords, targetCoords));
                 countId++;

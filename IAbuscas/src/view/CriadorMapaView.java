@@ -113,9 +113,6 @@ public class CriadorMapaView extends javax.swing.JFrame {
         
         int linhaRelacionada;
         int colunaRelacionada;
-        int fontSize;
-        fontSize = 8;
-        Font fonteMinha = new Font("Dialog", Font.PLAIN, fontSize);
         for (int i=0;i<mapa.getLinhas()*mapa.getColunas();i++)
         {
             linhaRelacionada = (i-i%mapa.getColunas())/mapa.getColunas();
@@ -131,7 +128,6 @@ public class CriadorMapaView extends javax.swing.JFrame {
             label = new JLabel(Integer.toString(i));
             label.setHorizontalAlignment(SwingConstants.CENTER);
             label.setVerticalAlignment(SwingConstants.CENTER);
-            label.setFont(fonteMinha);
             aux.add(label);
             
             mapaPanel.add(aux);
@@ -190,13 +186,14 @@ public class CriadorMapaView extends javax.swing.JFrame {
         g.weighty = middlePaneSize;
         g.gridx = 0;
         g.gridy = 1;
-        this.add(pMiddle,g);
+        this.add(pRolagemMapa,g);
         
         g.weighty = bottomPaneSize;
         g.gridx = 0;
         g.gridy = 2;
         this.add(pBottom,g);
-        
+
+        pRolagemMapa.setViewportView( pMiddle );
         
         pBottom.setLayout(new GridLayout(1,5));
         pBottom.add(btLimpar);
@@ -239,6 +236,7 @@ public class CriadorMapaView extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         rbLargura = new javax.swing.JRadioButton();
         rbAestrela = new javax.swing.JRadioButton();
+        pRolagemMapa = new javax.swing.JScrollPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -277,6 +275,19 @@ public class CriadorMapaView extends javax.swing.JFrame {
             }
         });
 
+        pMiddle.setBackground(new java.awt.Color(153, 153, 153));
+
+        javax.swing.GroupLayout pMiddleLayout = new javax.swing.GroupLayout(pMiddle);
+        pMiddle.setLayout(pMiddleLayout);
+        pMiddleLayout.setHorizontalGroup(
+            pMiddleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        pMiddleLayout.setVerticalGroup(
+            pMiddleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout pUpperLayout = new javax.swing.GroupLayout(pUpper);
         pUpper.setLayout(pUpperLayout);
         pUpperLayout.setHorizontalGroup(
@@ -290,7 +301,9 @@ public class CriadorMapaView extends javax.swing.JFrame {
                 .addGroup(pUpperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(rbPantano)
                     .addComponent(rbLava))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(pMiddle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(68, 68, 68))
         );
         pUpperLayout.setVerticalGroup(
             pUpperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -303,21 +316,10 @@ public class CriadorMapaView extends javax.swing.JFrame {
                 .addGroup(pUpperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rbMontanha)
                     .addComponent(rbLava))
-                .addContainerGap(29, Short.MAX_VALUE))
-        );
-
-        pMiddle.setBackground(new java.awt.Color(102, 102, 255));
-        pMiddle.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 5));
-
-        javax.swing.GroupLayout pMiddleLayout = new javax.swing.GroupLayout(pMiddle);
-        pMiddle.setLayout(pMiddleLayout);
-        pMiddleLayout.setHorizontalGroup(
-            pMiddleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        pMiddleLayout.setVerticalGroup(
-            pMiddleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pUpperLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(pMiddle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pBottom.setBackground(new java.awt.Color(51, 153, 255));
@@ -443,7 +445,7 @@ public class CriadorMapaView extends javax.swing.JFrame {
                         .addComponent(btVoltar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(pTipoBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addComponent(pBuscarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -471,21 +473,23 @@ public class CriadorMapaView extends javax.swing.JFrame {
                         .addGap(11, 11, 11))))
         );
 
+        pRolagemMapa.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 5));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pUpper, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(pMiddle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(pBottom, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pRolagemMapa, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pUpper, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(pMiddle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(pRolagemMapa, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pBottom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -649,6 +653,7 @@ public class CriadorMapaView extends javax.swing.JFrame {
     private javax.swing.JPanel pBottom;
     private javax.swing.JPanel pBuscarPanel;
     private javax.swing.JPanel pMiddle;
+    private javax.swing.JScrollPane pRolagemMapa;
     private javax.swing.JPanel pTipoBusca;
     private javax.swing.JPanel pUpper;
     private javax.swing.JRadioButton rbAestrela;

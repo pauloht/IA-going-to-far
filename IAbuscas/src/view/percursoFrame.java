@@ -72,9 +72,9 @@ public class PercursoFrame extends javax.swing.JFrame {
     private void fullScreen()
     {
         //+ soft code o maximo possivel :p, só mexer nos 2 pesos que deve tudo se ajeitar;
-        float upperPaneSize = 0.1f;//peso do painel de cima
+        float upperPaneSize = 0.10f;//peso do painel de cima
         
-        float bottomPaneSize = 0.1f;//peso painel de baixo
+        float bottomPaneSize = 0.05f;//peso painel de baixo
         
         float middlePaneSize = 1.0f - upperPaneSize - bottomPaneSize;//peso painel do meio
         
@@ -106,7 +106,9 @@ public class PercursoFrame extends javax.swing.JFrame {
         g.weighty = middlePaneSize;
         g.gridx = 0;
         g.gridy = 1;
-        this.add(pDesenho,g);
+        this.add(spDesenho,g);
+        
+        spDesenho.setViewportView(pDesenho);
         
         g.weighty = bottomPaneSize;
         g.gridx = 0;
@@ -195,7 +197,6 @@ public class PercursoFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pDesenho = new javax.swing.JPanel();
         pBottomPane = new javax.swing.JPanel();
         pOptions = new javax.swing.JPanel();
         btMostrarCell = new javax.swing.JRadioButton();
@@ -206,21 +207,10 @@ public class PercursoFrame extends javax.swing.JFrame {
         pTopPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         taMsg = new javax.swing.JTextArea();
+        spDesenho = new javax.swing.JScrollPane();
+        pDesenho = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        pDesenho.setBackground(new java.awt.Color(204, 204, 204));
-
-        javax.swing.GroupLayout pDesenhoLayout = new javax.swing.GroupLayout(pDesenho);
-        pDesenho.setLayout(pDesenhoLayout);
-        pDesenhoLayout.setHorizontalGroup(
-            pDesenhoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        pDesenhoLayout.setVerticalGroup(
-            pDesenhoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 213, Short.MAX_VALUE)
-        );
 
         pBottomPane.setBackground(new java.awt.Color(0, 102, 102));
 
@@ -322,21 +312,41 @@ public class PercursoFrame extends javax.swing.JFrame {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
         );
 
+        spDesenho.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 5));
+
+        pDesenho.setBackground(new java.awt.Color(204, 204, 204));
+
+        javax.swing.GroupLayout pDesenhoLayout = new javax.swing.GroupLayout(pDesenho);
+        pDesenho.setLayout(pDesenhoLayout);
+        pDesenhoLayout.setHorizontalGroup(
+            pDesenhoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 82, Short.MAX_VALUE)
+        );
+        pDesenhoLayout.setVerticalGroup(
+            pDesenhoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 213, Short.MAX_VALUE)
+        );
+
+        spDesenho.setViewportView(pDesenho);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pDesenho, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(pBottomPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(pTopPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(68, 68, 68)
+                .addComponent(spDesenho, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pTopPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(pDesenho, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(33, 33, 33)
+                .addComponent(spDesenho, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(pBottomPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -470,6 +480,7 @@ public class PercursoFrame extends javax.swing.JFrame {
     private javax.swing.JPanel pDesenho;
     private javax.swing.JPanel pOptions;
     private javax.swing.JPanel pTopPanel;
+    private javax.swing.JScrollPane spDesenho;
     private javax.swing.JTextArea taMsg;
     private javax.swing.JToggleButton tbAuto;
     private javax.swing.JTextField tfAutotempo;

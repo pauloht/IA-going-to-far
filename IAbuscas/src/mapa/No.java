@@ -261,6 +261,7 @@ public class No implements Comparable<Object> {
     }
 
     public void setHeuristicCost(int heuristicCost) {
+        //System.out.println("SOU O ID : " + this.id + ", MEU CUSTO : " + heuristicCost);
         this.heuristicCost = heuristicCost;
     }
     
@@ -270,6 +271,12 @@ public class No implements Comparable<Object> {
     
     public int custoComHeuristica(){
         return custoDoCaminho() + heuristicCost;
+    }
+    
+    //APAGAR
+    private String custos()
+    {
+        return(Integer.toString(custoDoCaminho()) + ", " + Integer.toString(heuristicCost));
     }
     
     public void updateF(){
@@ -292,7 +299,7 @@ public class No implements Comparable<Object> {
 
     @Override
     public String toString() {
-        return "No{" + id + '}';
+        return "No{ID=" + id + '}';
     }
     
 }
