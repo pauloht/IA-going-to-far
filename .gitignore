@@ -52,3 +52,6 @@ AutomatoPilha.pl
 relatorioish.txt
 trabalho.pro
 /IAbuscas/dist/
+/JPanelTests/nbproject/private/
+/JPanelTests/dist/
+/JPanelTests/build/
