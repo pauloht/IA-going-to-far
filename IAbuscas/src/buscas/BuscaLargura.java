@@ -92,6 +92,9 @@ public class BuscaLargura extends Busca{
         {
             evt.setEstado(TipoDeEvento.ACHOU);
             evt.setMsg("Visitando nó " + Integer.toString(noAtual.getId()) + " ... Busca encontrou alvo! Caminho : " + noAtual.caminhoAteEsseNo() + "\nNos Visitados : " + Integer.toString( this.nosVisitados() ) + "\nCusto : " + Integer.toString( noAtual.custoDoCaminho() ));
+            
+            PercursoFrame.getInstance().setCaminhoFinal( Busca.gerarLista(noAtual) );
+            
         }
         else
         {

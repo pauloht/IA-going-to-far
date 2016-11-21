@@ -6,6 +6,8 @@
 package buscas;
 
 import controle.Controle;
+import java.util.ArrayList;
+import java.util.List;
 import mapa.Mapa;
 import mapa.No;
 
@@ -52,6 +54,18 @@ public abstract class Busca {
             return (-1);
         }
         return (mapa.nosVisitados());
+    }
+    
+    protected static List< No > gerarLista(No noFinal)
+    {
+        List< No > caminhoFinal = new ArrayList< No >();
+        caminhoFinal.add(noFinal);
+        while (noFinal.getPai()!=null)
+        {
+            caminhoFinal.add(noFinal.getPai());
+            noFinal = noFinal.getPai();
+        }
+        return(caminhoFinal);
     }
     
     abstract public void iniciarBusca();

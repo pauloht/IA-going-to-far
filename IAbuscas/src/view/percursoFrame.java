@@ -34,6 +34,7 @@ public class PercursoFrame extends javax.swing.JFrame {
     public static int microsegundosdelay = 1000;
     private static boolean buscaterminou = false;
     Mapa buffer = null;
+    private List< No > caminhoFinal = null;
     /**
      * Creates new form percursoFrame
      */
@@ -47,6 +48,12 @@ public class PercursoFrame extends javax.swing.JFrame {
         buffer = mapa;
         buscaterminou = false;
     }
+
+    public void setCaminhoFinal(List<No> caminhoFinal) {
+        this.caminhoFinal = caminhoFinal;
+    }
+    
+    
     
     public static void buscaTerminou()
     {
@@ -57,6 +64,24 @@ public class PercursoFrame extends javax.swing.JFrame {
             instancia.btProximoPasso.setEnabled(true);
             instancia.tbAuto.setSelected(false);
             instancia.tbAuto.setEnabled(false);
+            
+            for ( int i=0;i<instancia.mapaPanel.size();i++ )
+            {
+                instancia.mapaPanel.get(i).setBackground(Color.RED);
+                instancia.mapaLabel.get(i).setText("");
+            }
+            
+            if (instancia.caminhoFinal!=null)
+            {
+                int aux = 0;
+                for (int i=instancia.caminhoFinal.size()-1;i>=0;i--)
+                {
+                    int posicao = instancia.caminhoFinal.get(i).getId();
+                    instancia.mapaPanel.get(posicao).setBackground(Color.GREEN);
+                    instancia.mapaLabel.get(posicao).setText(Integer.toString(aux));
+                    aux = aux+1;
+                }
+            }
         }
     }
     
@@ -136,6 +161,7 @@ public class PercursoFrame extends javax.swing.JFrame {
     
     private void meuInit(Mapa mapa)
     {
+        this.caminhoFinal = null;
         int linhas = mapa.getLinhas();
         int colunas = mapa.getColunas();
 

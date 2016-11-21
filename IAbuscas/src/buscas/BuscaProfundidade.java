@@ -8,6 +8,8 @@ import evento.Evento;
 import mapa.No;
 import controle.Controle;
 import evento.TipoDeEvento;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mapa.Mapa;
@@ -110,6 +112,9 @@ public class BuscaProfundidade extends Busca{
             {
                 evt.setEstado(TipoDeEvento.ACHOU);
                 evt.setMsg("Visitando nó " + Integer.toString(noAtual.getId()) + " ... Busca encontrou alvo! Caminho : " + noAtual.caminhoAteEsseNo() + "\nNos Visitados : " + Integer.toString( this.nosVisitados() ) + "\nCusto : " + Integer.toString( noAtual.custoDoCaminho() ));
+       
+                PercursoFrame.getInstance().setCaminhoFinal( Busca.gerarLista(noAtual) );
+                
             }
             else
             {

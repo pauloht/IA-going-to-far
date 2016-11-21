@@ -144,6 +144,9 @@ public class AStar extends Busca{
             evt.setMsg("Iniciando busca A*...\n Nós inicial e final são iguais... Caminho ''nulo''... " + Integer.toString(noAtual.getId()));
             evt.setEstado(TipoDeEvento.ACHOU);
             evt.setId(noAtual.getId());
+            
+            PercursoFrame.getInstance().setCaminhoFinal( Busca.gerarLista( noAtual ) );
+            
             HALT=true;
         } else {
             evt = new Evento(this);
@@ -226,7 +229,8 @@ public class AStar extends Busca{
             evt.setEstado(TipoDeEvento.PROCURANDO);
         }
         
-        evt.setMsg("Visitando nó " + Integer.toString(noAtual.getId()) + "...\n Lista aberta: " + open.toString() + "\nLista fechada: " + closed.toString() + "\nCAMINHO: " + noAtual.caminhoAteEsseNo() );
+        evt.setMsg("Visitando nó " + Integer.toString(noAtual.getId()) + "...\n Lista aberta: " + open.toString() + "\nLista fechada: " + closed.toString() + "\nCAMINHO: " + noAtual.caminhoAteEsseNo() + "\nCusto : " + Integer.toString( noAtual.custoDoCaminho() ) );
+        PercursoFrame.getInstance().setCaminhoFinal( Busca.gerarLista(noAtual) );
         //System.out.println("No atual: " + noAtual.getId());
         //System.out.println("No fim  : " + fim.getId());
         //System.out.println("OPEN:     " + open.toString());
