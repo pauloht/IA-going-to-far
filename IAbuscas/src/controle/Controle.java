@@ -11,6 +11,8 @@ import evento.TipoDeEvento;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Observable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Timer;
 import view.PercursoFrame;
 import view.ViewThread;
@@ -22,6 +24,8 @@ import view.ViewThread;
 public class Controle extends Observable{
     private static Controle instancia;
     private static Busca buscabuffer = null;
+    
+    private static Evento eventoBuffer;
     
     public Controle(Busca busca)
     {
@@ -50,10 +54,10 @@ public class Controle extends Observable{
                         int contador = 0;
                         @Override
                         public void actionPerformed(ActionEvent e) {
+                            instancia.setChanged();
+                            instancia.notifyObservers(evt);
                             if (evt.getChamador()!=null)
                             {
-                                instancia.setChanged();
-                                instancia.notifyObservers(evt);
                                 //System.out.println(evt.getMsg());
                                 if (evt.getEstado()==TipoDeEvento.PROCURANDO)
                                 {
@@ -62,12 +66,25 @@ public class Controle extends Observable{
                                         evt.getChamador().continuar();
                                     }
                                 }
-                                else
+                                else if (evt.getEstado()==TipoDeEvento.ACHOU)
                                 {
                                     PercursoFrame.buscaTerminou();
-                                    //System.out.println("fim busca!");
+                                    Evento novoEvento = new Evento(null);
+                                    novoEvento.setMsg( eventoBuffer.getMsg() );
+                                    novoEvento.setEstado(TipoDeEvento.LIMPAR);
+                                    try {
+                                        Controle.lidarComEvento(novoEvento);
+                                        //System.out.println("fim busca!");
+                                    } catch (InterruptedException ex) {
+                                        Logger.getLogger(Controle.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                }
+                                else
+                                {
+                                    throw new IllegalArgumentException("Argumento invalido, so existe 2 possibilidades!");
                                 }
                             }
+                            eventoBuffer = evt;
                             timer.stop();
                         }
                     });

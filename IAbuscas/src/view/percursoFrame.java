@@ -27,7 +27,7 @@ import mapa.No;
  * @author FREE
  */
 public class PercursoFrame extends javax.swing.JFrame {
-    List< JPanel > mapaPanel = new ArrayList<>();
+    List< MyJPanel > mapaPanel = new ArrayList<>();
     List< JLabel > mapaLabel = new ArrayList<>();
     private static PercursoFrame instancia = null;
     public static boolean autostatus = false;
@@ -65,21 +65,66 @@ public class PercursoFrame extends javax.swing.JFrame {
             instancia.tbAuto.setSelected(false);
             instancia.tbAuto.setEnabled(false);
             
-            for ( int i=0;i<instancia.mapaPanel.size();i++ )
-            {
-                instancia.mapaPanel.get(i).setBackground(Color.RED);
-                instancia.mapaLabel.get(i).setText("");
-            }
-            
             if (instancia.caminhoFinal!=null)
             {
-                int aux = 0;
-                for (int i=instancia.caminhoFinal.size()-1;i>=0;i--)
+                for (int i=0;i<instancia.caminhoFinal.size()-1;i++)
                 {
-                    int posicao = instancia.caminhoFinal.get(i).getId();
-                    instancia.mapaPanel.get(posicao).setBackground(Color.GREEN);
-                    instancia.mapaLabel.get(posicao).setText(Integer.toString(aux));
-                    aux = aux+1;
+                    No filho = instancia.caminhoFinal.get(i);
+                    No pai = instancia.caminhoFinal.get(i+1); 
+                    int tamanhoColuna = instancia.buffer.getColunas();
+                    PaintEnum tipoPai = null;
+                    PaintEnum tipoFilho = null;
+                    
+                    System.out.println("pai id = " + pai.getId());
+                    
+                    System.out.println("filho id = " + filho.getId());
+                    
+                    if (filho.getPai()==null)
+                    {
+                        System.err.println("PAI NULO\n");
+                    }
+                    if (filho.getId()==pai.getId() - tamanhoColuna)
+                    {
+                        tipoPai = PaintEnum.SUL;
+                        tipoFilho = PaintEnum.NORTE;
+                    }
+                    else if (filho.getId()==pai.getId()+1)
+                    {
+                        tipoPai = PaintEnum.OESTE;
+                        tipoFilho = PaintEnum.LESTE;
+                    }
+                    else if (filho.getId()==pai.getId()-1)
+                    {
+                        tipoPai = PaintEnum.LESTE;
+                        tipoFilho = PaintEnum.OESTE;
+                    }
+                    else if (filho.getId()==pai.getId() + tamanhoColuna)
+                    {
+                        tipoPai = PaintEnum.NORTE;
+                        tipoFilho = PaintEnum.SUL;
+                    }
+                    else
+                    {
+                        throw new UnknownError("Isso nao deve acontecer");
+                    }
+                    if (filho!=null)
+                    {
+                        MyJPanel panelCorrespondentefilho = instancia.mapaPanel.get(filho.getId());
+                        panelCorrespondentefilho.paiPintura = tipoPai;
+                    }
+                    
+                    if (pai!=null)
+                    {
+                        MyJPanel panelCorrespondentepai = instancia.mapaPanel.get(pai.getId());
+                        panelCorrespondentepai.filhoPintura = tipoFilho;
+                    }
+                    
+                    
+                }
+                
+                for ( MyJPanel panel : instancia.mapaPanel)
+                {
+                    panel.repaint();
                 }
             }
         }
@@ -167,7 +212,7 @@ public class PercursoFrame extends javax.swing.JFrame {
 
         tfAutotempo.setText(Integer.toString(microsegundosdelay));
         pDesenho.setLayout(new GridLayout(linhas,colunas,1,1));
-        JPanel aux;
+        MyJPanel aux;
         JLabel label;
         No[][] noMatrix = mapa.getMatriz();
         
@@ -179,7 +224,7 @@ public class PercursoFrame extends javax.swing.JFrame {
             colunaRelacionada = i%colunas;
             No noRelacionado = noMatrix[linhaRelacionada][colunaRelacionada];
             
-            aux = new JPanel();
+            aux = new MyJPanel();
             aux.setLayout(new GridLayout(1,1));
             aux.setBackground(noRelacionado.getTipo().getColor());
             
@@ -207,6 +252,15 @@ public class PercursoFrame extends javax.swing.JFrame {
         selecionado = mapaPanel.get(id);
         bufferColor = selecionado.getBackground();
         selecionado.setBackground(Color.BLACK);
+    }
+    
+    public void cleanBuffer()
+    {
+        if (selecionado != null)
+        {
+            selecionado.setBackground(bufferColor);
+        }
+        selecionado = null;
     }
     
     public void changeMsg(String msg)

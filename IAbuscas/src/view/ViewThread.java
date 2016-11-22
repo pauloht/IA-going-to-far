@@ -7,6 +7,7 @@ package view;
 
 import evento.Evento;
 import evento.TipoDeEvento;
+import java.awt.Color;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -16,6 +17,8 @@ import java.util.Observer;
  */
 public class ViewThread implements Observer{
     private static ViewThread instancia = new ViewThread();
+    private static int bufferID;
+    private static int bufferRGB;
     public static ViewThread getInstancia()
     {
         return(instancia);
@@ -37,6 +40,10 @@ public class ViewThread implements Observer{
             {
                 int id = evento.getId();
                 PercursoFrame.getInstance().changeCell(id);
+            }
+            if (evento.getEstado()==TipoDeEvento.LIMPAR)
+            {
+                PercursoFrame.getInstance().cleanBuffer();
             }
         }
     }
