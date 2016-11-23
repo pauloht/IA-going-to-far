@@ -75,9 +75,9 @@ public class PercursoFrame extends javax.swing.JFrame {
                     PaintEnum tipoPai = null;
                     PaintEnum tipoFilho = null;
                     
-                    System.out.println("pai id = " + pai.getId());
+                    //System.out.println("pai id = " + pai.getId());
                     
-                    System.out.println("filho id = " + filho.getId());
+                    //System.out.println("filho id = " + filho.getId());
                     
                     if (filho.getPai()==null)
                     {

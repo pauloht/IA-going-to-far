@@ -124,7 +124,7 @@ public class BuscaLargura extends Busca{
                 noAtual.getOeste().quebrarConexoes();
             }
         }
-        evt.setMsg(evt.getMsg() + "\nNos visitados : " + nosVisitados.toString());
+        evt.setMsg(evt.getMsg() + "\nNos a visitar : " + lista.toString() +"\nNos visitados : " + nosVisitados.toString());
         try {
             Controle.lidarComEvento(evt);
         } catch (InterruptedException ex) {

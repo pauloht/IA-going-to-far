@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Data.Base_Data;
+package salvarcarregar;
 
 /**
  *
- * @author Paulo.Tenorio
+ * @author FREE
  */
-public enum CGEnum {
-    BOUNDING_BOX,
-    MEDIASDOSPONTOS;
+public enum TipoArquivo {
+    PADRAO,
+    TXTJOAO;
 }

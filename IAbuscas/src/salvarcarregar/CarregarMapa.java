@@ -20,44 +20,106 @@ import mapa.Terreno;
  * @author FREE
  */
 public class CarregarMapa {
-    public static Mapa carregarMapa(File file)
+    public static Mapa carregarMapa(File file,TipoArquivo tipo)
     {
         try{
-        FileReader fr = new FileReader(file);
+            if (tipo == TipoArquivo.PADRAO)
+            {
+                FileReader fr = new FileReader(file);
 
-        BufferedReader br = new BufferedReader(fr);
-        String linha = "";
-        
-        linha = br.readLine();
-        
-        int nLinha = Integer.parseInt(linha);
-       
-        linha = br.readLine();
-        
-        int nColuna = Integer.parseInt(linha);
-        
-        Mapa retorno = new Mapa(nLinha,nColuna);
-        
-        String[] aux;
-        
-        for (int i=0;i<nLinha;i++)
-        {
-            linha = br.readLine();
-            if (linha == null)
-            {
-                throw new FileCorrumpidaException("Linhas faltando");
+                BufferedReader br = new BufferedReader(fr);
+                String linha = "";
+
+                linha = br.readLine();
+
+                int nLinha = Integer.parseInt(linha);
+
+                linha = br.readLine();
+
+                int nColuna = Integer.parseInt(linha);
+
+                Mapa retorno = new Mapa(nLinha,nColuna);
+
+                String[] aux;
+
+                for (int i=0;i<nLinha;i++)
+                {
+                    linha = br.readLine();
+                    if (linha == null)
+                    {
+                        throw new FileCorrumpidaException("Linhas faltando");
+                    }
+                    aux = linha.split(" ");
+                    if (aux.length!=nColuna)
+                    {
+                        throw new FileCorrumpidaException("Numero de colunas incorreto");
+                    }
+                    for (int j=0;j<aux.length;j++)
+                    {
+                        retorno.getMatriz()[i][j].setTipo( Terreno.getTerrenoFromID(Integer.parseInt( aux[j] ) ) );
+                    }
+                }
+                return(retorno);
             }
-            aux = linha.split(" ");
-            if (aux.length!=nColuna)
+            else if (tipo == TipoArquivo.TXTJOAO)
             {
-                throw new FileCorrumpidaException("Numero de colunas incorreto");
+                FileReader fr = new FileReader(file);
+
+                BufferedReader br = new BufferedReader(fr);
+                String linha = "";
+
+                String[] aux;
+                int nColunas = 0;
+                int[][] buffer = new int[50][50];
+                int contadorLinhas = 0;
+                while (true)
+                {
+                    linha = br.readLine();
+                    boolean comeco = true;
+                    if (linha == null)
+                    {
+                        break;
+                    }
+                    if (comeco)
+                    {
+                        comeco = false;
+                        nColunas = linha.length();
+                    }
+                    else
+                    {
+                        if (nColunas!=linha.length())
+                        {
+                            throw new FileCorrumpidaException("Numero colunas inconstantes!");
+                        }
+                    }
+                    for (int i=0;i<linha.length();i++)
+                    {
+                        buffer[contadorLinhas][i] = Character.getNumericValue( linha.charAt(i) );
+                    }
+                    contadorLinhas++;
+                }
+                
+                int nLinha = contadorLinhas;
+
+                int nColuna = nColunas;
+                
+                Mapa retorno = new Mapa(nLinha,nColuna);
+
+                for (int i=0;i<nLinha;i++)
+                {
+                    for (int j=0;j<nColunas;j++)
+                    {
+                        retorno.getMatriz()[i][j].setTipo( Terreno.getTerrenoFromID( buffer[i][j] ) );
+                    }
+                }
+                
+                return( retorno );
+                
             }
-            for (int j=0;j<aux.length;j++)
+            else
             {
-                retorno.getMatriz()[i][j].setTipo( Terreno.getTerrenoFromID(Integer.parseInt( aux[j] ) ) );
+                throw new IllegalArgumentException("Tipo arquivo ilegal!");
             }
-        }
-            return(retorno);
         }
         catch(IOException | NumberFormatException | FileCorrumpidaException e)
         {

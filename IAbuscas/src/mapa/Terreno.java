@@ -16,8 +16,8 @@ public enum Terreno {
     INVALIDO  (-1, Integer.MAX_VALUE, Color.MAGENTA),
     PLANO     ( 1,                 1, Color.GREEN),
     MONTANHOSO( 2,                 2, new Color(156, 93, 82)),
-    PANTANO   ( 3,                 4, Color.BLUE),
-    LAVA      ( 4,                 8, Color.RED);
+    PANTANO   ( 4,                 4, Color.BLUE),
+    LAVA      ( 8,                 8, Color.RED);
     
     private final int ID;
     private final Color cor;

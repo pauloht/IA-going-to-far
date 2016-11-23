@@ -13,6 +13,7 @@ import mapa.Mapa;
 import mapa.MapaAleatorio;
 import mapa.MapaAleatorio.TipoMapa;
 import salvarcarregar.CarregarMapa;
+import salvarcarregar.TipoArquivo;
 
 /**
  *
@@ -163,16 +164,29 @@ public class TelaInicial extends javax.swing.JFrame {
     private void btSelecionarMapaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSelecionarMapaActionPerformed
         // TODO add your handling code here:
         this.setVisible(false);
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Mapas IA","IAmap","text");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Mapas IA IAmap","IAmap","text");
+        FileNameExtensionFilter filter2 = new FileNameExtensionFilter("Mapas IA txt","txt","text");
         final JFileChooser fc = new JFileChooser();
         fc.setFileFilter(filter);
+        fc.addChoosableFileFilter(filter2);
         
         int returnVal = fc.showOpenDialog(this);
         
         if (returnVal == JFileChooser.APPROVE_OPTION)
         {
             File file = fc.getSelectedFile();
-            Mapa mapa = CarregarMapa.carregarMapa(file);
+            TipoArquivo tipo;
+            if (file.getAbsolutePath().endsWith(".txt"))
+            {
+                System.out.println("txt format");
+                tipo = TipoArquivo.TXTJOAO;
+            }
+            else
+            {
+                System.out.println("iamap format");
+                tipo = TipoArquivo.PADRAO;
+            }
+            Mapa mapa = CarregarMapa.carregarMapa(file,tipo);
             if (mapa!=null)
             {
                 JOptionPane.showMessageDialog(this, "mapa carregado com sucesso!");
