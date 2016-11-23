@@ -44,23 +44,36 @@ public class MapaAleatorio {
         }
     }
     
-    private Mapa horizontalStripes(){
+    private Mapa verticalStripes(){
         Mapa mapa = new Mapa(linhas, colunas);
         No[][] nos = mapa.matriz;
+        
         for (int i=0; i<nos.length; i++){
             for (int j=0; j<nos[i].length; j++){
                 if (j%2==0){
-                    nos[i][j].setTipo(Terreno.MONTANHOSO);
-                } else {
                     nos[i][j].setTipo(Terreno.PLANO);
+                } else {
+                    nos[i][j].setTipo(decidirTerreno());
                 }
             }
         }
         return mapa;
     }
             
-    private Mapa verticalStripes(){
+    private Mapa horizontalStripes(){
+        Mapa mapa = new Mapa(linhas, colunas);
+        No[][] nos = mapa.matriz;
 
+        for (int i=0; i<nos.length; i++){
+            for (int j=0; j<nos[i].length; j++){
+                if (i%2==0){
+                    nos[i][j].setTipo(Terreno.PLANO);
+                } else {
+                    nos[i][j].setTipo(decidirTerreno());
+                }
+            }
+        }
+        return mapa;
     }
 
     private Mapa presetMaze(){
@@ -79,35 +92,35 @@ public class MapaAleatorio {
     }
     
     private Terreno decidirTerreno(){
+        final int LIMIAR = 10;
         final int MAX_ITERATIONS = 500;
         int i=0;
         
         final int min = 0;
 
         while(i < MAX_ITERATIONS){
-            int max = tipo.getProbPlano()+1;
-
+            int max = tipo.getProbPlano() + LIMIAR;
             Random rand = new Random();
             int randomIndex = rand.nextInt((max - min) + 1) + min;
             if (randomIndex <= tipo.probPlano){
                 return Terreno.PLANO;
             }
 
-            max = tipo.getProbPantano() + 1;
+            max = tipo.getProbPantano() + LIMIAR;
             rand = new Random();
             randomIndex = rand.nextInt((max - min) + 1) + min;
             if (randomIndex <= tipo.probPantano){
                 return Terreno.PANTANO;
             }
 
-            max = tipo.getProbMontanha()+ 1;
+            max = tipo.getProbMontanha()+ LIMIAR;
             rand = new Random();
             randomIndex = rand.nextInt((max - min) + 1) + min;
             if (randomIndex <= tipo.probMontanha){
                 return Terreno.MONTANHOSO;
             }
 
-            max = tipo.getProbLava()+ 1;
+            max = tipo.getProbLava()+ LIMIAR;
             rand = new Random();
             randomIndex = rand.nextInt((max - min) + 1) + min;
             if (randomIndex <= tipo.probLava){
@@ -155,14 +168,19 @@ public class MapaAleatorio {
     */
     public static enum TipoMapa{
         //ID, custo, Color
-        FACIL             (10, 4, 2, 0, "Facil"),
-        MEDIO             ( 8, 6, 8, 6, "Medio"),
-        DIFICIL           ( 0, 2, 4,10, "Dificil"),
+        PLANICIE          ( 7,  2,  1, -1, "Planície"),
+        PANTANO           ( 0, 10,  1, -1, "Pantanoso"),
+        MONTANHOSO        ( 1,  0, 10, -1, "Montanhoso"),
+        VULCANICO         ( 0, -1,  1, 10, "Vulcânico"),
+        
+        //FACIL             ( 7, 5, 2,-1, "Fácil"),
+        //MEDIO             ( 4, 5, 3, 1, "Médio"),
+        //DIFICIL           (-1, 5, 5, 7, "Difícil"),
         FULL_RANDOM       ( 2, 2, 2, 2, "Full Random"),
         
-        HORIZONTAL_STIPES ( 0, 0, 0, 0, "Linhas Horizontais"),
-        VERTICAL_STRIPES  ( 0, 0, 0, 0, "Linhas Verticais"),
-        PRESET_MAZE       ( 0, 0, 0, 0, "Preset");
+        HORIZONTAL_STIPES (-1, 0, 0, 0, "Linhas Horizontais"),
+        VERTICAL_STRIPES  (-1, 0, 0, 0, "Linhas Verticais"),
+        PRESET_MAZE       (-1, 0, 0, 0, "Espiral");
     
         private final int probPlano;
         private final int probPantano;
@@ -192,8 +210,12 @@ public class MapaAleatorio {
         public int getProbLava() {
             return probLava;
         }
+
+        public String getDesc() {
+            return desc;
+        }
         
-        public TipoMapa fromDesc(String comp){
+        public static TipoMapa fromDesc(String comp){
             for (MapaAleatorio.TipoMapa tipo : MapaAleatorio.TipoMapa.values()){
                 if (tipo.desc.equals(comp)){
                     return tipo;
