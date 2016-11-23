@@ -10,6 +10,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import mapa.Mapa;
+import mapa.MapaAleatorio;
+import mapa.MapaAleatorio.TipoMapa;
 import salvarcarregar.CarregarMapa;
 
 /**
@@ -23,9 +25,16 @@ public class TelaInicial extends javax.swing.JFrame {
      */
     public TelaInicial() {
         initComponents();
+        populateCombo();
         ViewGlobal.centralizarJanela(this);
     }
 
+    private void populateCombo(){
+        for (MapaAleatorio.TipoMapa tipo : MapaAleatorio.TipoMapa.values()){
+            RandomCombo.addItem(tipo.getDesc());
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -43,6 +52,8 @@ public class TelaInicial extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         btSelecionarMapa = new javax.swing.JButton();
+        RandomButton = new javax.swing.JButton();
+        RandomCombo = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -104,18 +115,33 @@ public class TelaInicial extends javax.swing.JFrame {
             }
         });
 
+        RandomButton.setText("Mapa Aleatório");
+        RandomButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RandomButtonActionPerformed(evt);
+            }
+        });
+
+        RandomCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", " " }));
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(btSelecionarMapa)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btSelecionarMapa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(RandomButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(RandomCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(RandomCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(RandomButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btSelecionarMapa))
         );
 
@@ -194,6 +220,27 @@ public class TelaInicial extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void RandomButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RandomButtonActionPerformed
+        Integer nLinhas = (Integer)cgLinhas.getValue();
+        Integer nColunas = (Integer)cgColunas.getValue();
+        TipoMapa tipo = TipoMapa.fromDesc( (String) RandomCombo.getSelectedItem());
+        
+        MapaAleatorio aleat = new MapaAleatorio(nLinhas, nColunas, tipo);
+                
+        Mapa mapa = aleat.generate();
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                CriadorMapaView view = new CriadorMapaView(mapa);
+                view.setVisible(true);
+            }
+            
+        });
+        
+        
+        this.dispose();
+    }//GEN-LAST:event_RandomButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -230,6 +277,8 @@ public class TelaInicial extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton RandomButton;
+    private javax.swing.JComboBox<String> RandomCombo;
     private javax.swing.JButton btSelecionarMapa;
     private javax.swing.JSpinner cgColunas;
     private javax.swing.JSpinner cgLinhas;
