@@ -200,7 +200,7 @@ public class PercursoFrame extends javax.swing.JFrame {
         }
         instancia = new PercursoFrame(mapa);
         System.out.println("instancia de visualizacao criada!");
-        System.out.println("deixando visualização visivel ja...mudar dps");
+        //System.out.println("deixando visualização visivel ja...mudar dps");
         instancia.setVisible(true);
     }
     
@@ -534,6 +534,8 @@ public class PercursoFrame extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(PercursoFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 

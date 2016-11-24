@@ -98,7 +98,7 @@ public class No implements Comparable<Object> {
     
     public int custoDoCaminho()
     {
-        System.out.println(this.getPai());
+        //System.out.println(this.getPai());
         int custo = 0;
         No atual = this;
         custo = custo + atual.tipo.getCusto();

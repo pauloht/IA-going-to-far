@@ -37,8 +37,8 @@ public class MapaAleatorio {
                 return horizontalStripes();
             case VERTICAL_STRIPES:
                 return verticalStripes();
-            case PRESET_MAZE:
-                return presetMaze();
+            /*case PRESET_MAZE:
+                return presetMaze();*/
             default:
                 return randomGenerate();
         }
@@ -76,9 +76,9 @@ public class MapaAleatorio {
         return mapa;
     }
 
-    private Mapa presetMaze(){
+    /*private Mapa presetMaze(){
 
-    }
+    }*/
 
     private Mapa randomGenerate(){
         Mapa mapa = new Mapa(linhas, colunas);
@@ -179,8 +179,8 @@ public class MapaAleatorio {
         FULL_RANDOM       ( 2, 2, 2, 2, "Full Random"),
         
         HORIZONTAL_STIPES (-1, 0, 0, 0, "Linhas Horizontais"),
-        VERTICAL_STRIPES  (-1, 0, 0, 0, "Linhas Verticais"),
-        PRESET_MAZE       (-1, 0, 0, 0, "Espiral");
+        VERTICAL_STRIPES  (-1, 0, 0, 0, "Linhas Verticais");
+        //PRESET_MAZE       (-1, 0, 0, 0, "Espiral");
     
         private final int probPlano;
         private final int probPantano;

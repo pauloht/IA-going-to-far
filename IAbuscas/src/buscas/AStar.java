@@ -181,14 +181,14 @@ public class AStar extends Busca{
         List<No> vizinhos = getNeighbours(noAtual);
         parentNodes(vizinhos, noAtual);
         
-        System.out.println("------------------------REPORT-----------------------");
+        /*System.out.println("------------------------REPORT-----------------------");
         System.out.println("No atual: " + noAtual.getId());
         System.out.println("NO ATUAL COST: " + noAtual.custoComHeuristica());
         System.out.println("Vizinhos: " + vizinhos.toString());
         System.out.println("No fim  : " + fim.getId());
         System.out.println("OPEN:     " + open.toString());
         System.out.println("Closed:   " + closed.toString());
-        System.out.println("------------------------END REPORT-----------------------");
+        System.out.println("------------------------END REPORT-----------------------");*/
         
         for (No vizinho : vizinhos){
             if (open.contains(vizinho)){
@@ -202,9 +202,9 @@ public class AStar extends Busca{
             }  
         }
         Collections.sort(vizinhos);
-        System.out.println("SORT");
+        //System.out.println("SORT");
         open.addAll(vizinhos);
-        System.out.println("COL");
+        //System.out.println("COL");
         //NoAtual estiver na vizinhança do final, vai direto, else, menor custo
         if (atualNaVizinhacaDoFinal()){
             fim.setPai(noAtual);
@@ -235,7 +235,7 @@ public class AStar extends Busca{
         //System.out.println("No fim  : " + fim.getId());
         //System.out.println("OPEN:     " + open.toString());
         //System.out.println("Closed:   " + closed.toString());
-        System.out.println("BEF:");
+        //System.out.println("BEF:");
         try {
             Controle.lidarComEvento(evt);
         } catch (InterruptedException ex) {
