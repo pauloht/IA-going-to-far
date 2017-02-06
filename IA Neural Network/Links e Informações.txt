@@ -1,0 +1,42 @@
+ENCOG
+
+encog neural network java example
+https://github.com/encog/encog-java-examples/blob/master/src/main/java/org/encog/examples/neural/xor/XORHelloWorld.java
+https://github.com/encog/encog-sample-java/blob/master/src/main/java/HelloWorld.java
+http://www.heatonresearch.com/encog/
+
+
+
+Examples and Info
+
+http://neuroph.sourceforge.net/tutorials/GlassIdentification/GlassIdentificationUsingNeuralNetworks.html
+http://stats.stackexchange.com/questions/181/how-to-choose-the-number-of-hidden-layers-and-nodes-in-a-feedforward-neural-netw
+https://github.com/neuroph/neuroph/blob/master/neuroph-2.9/Samples/src/main/java/org/neuroph/samples/uci/GlassIdentificationSample.java
+
+Referências?
+
+http://www.heatonresearch.com/book/programming-neural-networks-java-2.html
+Ripley, B. D. (1996), Pattern Recognition and Neural Networks, Cambridge University Press.
+Examples
+Bishop - Neural Networks for Pattern Recognition
+Hagan  - Neural Network Design
+
+
+
+
+
+
+
+
+
+
+
+
+NEUROTH   ---- AND IT'S DEADLY SLOW
+
+
+
+https://www.google.com.br/?gws_rd=ssl#q=neural+network+java
+http://neuroph.sourceforge.net/
+http://neuroph.sourceforge.net/tutorials/Braille/RecognitionOfBrailleAlphabetUsingNeuralNetworks.html
+https://github.com/ivan-vasilev/neuralnetworks

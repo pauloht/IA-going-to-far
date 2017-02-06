@@ -5,12 +5,20 @@
  */
 package ia_neuralnetwork;
 
+import java.io.File;
+
 /**
  *
  * @author JFPS
  */
 public class IA_NeuralNetwork {
 
+    private static final double TRAINING_PERCENTAGE = 0.7;
+    private static final double VALIDATE_PRECENTAGE = 0.2;
+    private static final double TESTING_PERCENTAGE  = 0.5;
+    
+    private static final File DATASET = new File("data/glass.csv");
+    
     /**
      * @param args the command line arguments
      */
