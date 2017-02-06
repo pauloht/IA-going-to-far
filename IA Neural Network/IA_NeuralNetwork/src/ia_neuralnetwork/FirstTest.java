@@ -5,11 +5,15 @@
  */
 package ia_neuralnetwork;
 
+import org.encog.engine.network.activation.ActivationSigmoid;
+import org.encog.engine.network.activation.ActivationSoftMax;
+import org.encog.neural.networks.layers.BasicLayer;
+
 /**
  *
  * @author JFPS
  */
-public final class FirstTest {
+public final class FirstTest extends NetworkTest{
     /*
     Neste teste, a "Hidden Layer" possuirá o número de neurônios
     igual a média entre o número de entradas e saídas, como a maioria 
@@ -28,4 +32,18 @@ public final class FirstTest {
     */
     
     private static final int ENTRADA=9;
+    private static final int OCULTA=8;
+    private static final int SAIDA=7;
+    
+    public FirstTest() {
+        super();
+        
+        BasicLayer entrada = new BasicLayer(null, true, ENTRADA);
+        BasicLayer oculta  = new BasicLayer(new ActivationSigmoid(), true, OCULTA);
+        BasicLayer saida   = new BasicLayer(new ActivationSoftMax(), false, SAIDA);
+        
+        super.setLayers(entrada, oculta, saida);
+    }
+    
+    
 }
