@@ -12,6 +12,8 @@ Examples and Info
 http://neuroph.sourceforge.net/tutorials/GlassIdentification/GlassIdentificationUsingNeuralNetworks.html
 http://stats.stackexchange.com/questions/181/how-to-choose-the-number-of-hidden-layers-and-nodes-in-a-feedforward-neural-netw
 https://github.com/neuroph/neuroph/blob/master/neuroph-2.9/Samples/src/main/java/org/neuroph/samples/uci/GlassIdentificationSample.java
+https://github.com/encog/encog-java-examples/blob/master/src/main/java/org/encog/examples/guide/classification/IrisClassification.java
+http://stackoverflow.com/questions/29372537/how-do-i-normalize-csv-input-data-in-encog?rq=1
 
 Referências?
 
@@ -23,10 +25,12 @@ Hagan  - Neural Network Design
 
 
 
-
-
-
-
+Moar Links
+http://pavel.surmenok.com/2014/07/06/neural-networks-training-using-encog/
+http://www.programcreek.com/java-api-examples/index.php?api=org.encog.neural.networks.training.propagation.back.Backpropagation
+https://github.com/encog/encog-java-examples/blob/master/src/main/java/org/encog/examples/neural/xor/XORHelloWorld.java
+https://www.codeproject.com/Articles/52847/An-Introduction-to-Encog-Neural-Networks-for-Java
+https://github.com/encog/encog-java-examples/blob/master/src/main/java/org/encog/examples/neural/recurrent/elman/ElmanXOR.java
 
 
 

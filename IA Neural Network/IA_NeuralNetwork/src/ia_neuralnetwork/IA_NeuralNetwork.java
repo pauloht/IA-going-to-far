@@ -108,16 +108,24 @@ public class IA_NeuralNetwork {
     }
     
     /**
-     * @param args the command line arguments
-     * @throws java.io.FileNotFoundException
+     * Antigo e inutilizado.
+     * @throws FileNotFoundException 
      */
-    public static void main(String[] args) throws FileNotFoundException {
+    private static void crummyBgn() throws FileNotFoundException{
         double[][] rawData = DataSetReader.reader(DATASET);
         
         NormalizeData normalize = new NormalizeData();
         rawData = normalize.normalizeMatrix(rawData);
         
         setInputsAndOutputs(matrixCopyAllButLast(rawData), getLastColumn(rawData));
+    }
+    
+    /**
+     * @param args the command line arguments
+     * @throws java.io.FileNotFoundException
+     */
+    public static void main(String[] args) throws FileNotFoundException {
+        
         
         
         
