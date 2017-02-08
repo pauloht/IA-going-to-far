@@ -9,7 +9,7 @@ import java.io.File;
 import java.util.Arrays;
 import org.encog.ConsoleStatusReportable;
 import org.encog.Encog;
-import org.encog.app.analyst.util.AnalystReportBridge;
+import org.encog.StatusReportable;
 import org.encog.ml.MLRegression;
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.versatile.NormalizationHelper;
@@ -37,6 +37,7 @@ public abstract class NetworkTest {
     
     private final BasicNetwork network;
     private final VersatileMLDataSet dataSet;
+    private final File dataFile;
     
     private VersatileMLDataSet defineSource(File glassDataSet){
         VersatileDataSource source = new CSVDataSource(glassDataSet, false, CSVFormat.DECIMAL_POINT);
@@ -62,6 +63,7 @@ public abstract class NetworkTest {
     
     protected NetworkTest(File glassDataSet) {
         this.network = new BasicNetwork();
+        dataFile = glassDataSet;
         dataSet = defineSource(glassDataSet);
     }
     
@@ -75,52 +77,41 @@ public abstract class NetworkTest {
     
     abstract double getValidationPercentage();
     
+    abstract StatusReportable getReport();
+    
+    abstract int crossValidationK();
+    
     protected void run(){
         try {
             EncogModel model = new EncogModel(dataSet);
             model.selectMethod(dataSet, MLMethodFactory.TYPE_FEEDFORWARD);
 
-            model.setReport(new ConsoleStatusReportable());
+            //model.setReport(new ConsoleStatusReportable());
+            model.setReport(getReport());
             dataSet.normalize();
 
             model.holdBackValidation(getValidationPercentage(), SHUFFLE_DATA, SEED_TO_SHUFFLE);
             model.selectTrainingType(dataSet);
+            MLRegression regr = (MLRegression)model.crossvalidate(crossValidationK(), SHUFFLE_DATA);
 
-            MLRegression bestMethod = (MLRegression)model.crossvalidate(5, true);
-
-            
-            
-            asfdaskdfjasdçlfkjasdfkçl
-                    
-                    
-                    MUDAR AQUIç
-                            
-                            açslkfajsçf
-                            
-                            sdfçaksfjçasf
-                                    fas
-                                    
-                                    fas
-                                            fsda
-                                            fdsa
-            
+                       
             // Display the training and validation errors.
-            System.out.println( "Training error: " + EncogUtility.calculateRegressionError(bestMethod, model.getTrainingDataset()));
-            System.out.println( "Validation error: " + EncogUtility.calculateRegressionError(bestMethod, model.getValidationDataset()));
+            System.out.println( "Training error: " + EncogUtility.calculateRegressionError(regr, model.getTrainingDataset()));
+            System.out.println( "Validation error: " + EncogUtility.calculateRegressionError(regr, model.getValidationDataset()));
 
             // Display our normalization parameters.
             NormalizationHelper helper = dataSet.getNormHelper();
             System.out.println(helper.toString());
 
             // Display the final model.
-            System.out.println("Final model: " + bestMethod);
+            System.out.println("Final model: " + regr);
 
             // Loop over the entire, original, dataset and feed it through the model.
             // This also shows how you would process new data, that was not part of your
             // training set.  You do not need to retrain, simply use the NormalizationHelper
             // class.  After you train, you can save the NormalizationHelper to later
             // normalize and denormalize your data.
-            ReadCSV csv = new ReadCSV(irisFile, false, CSVFormat.DECIMAL_POINT);
+            ReadCSV csv = new ReadCSV(dataFile, false, CSVFormat.DECIMAL_POINT);
             String[] line = new String[4];
             MLData input = helper.allocateInputVector();
 
@@ -132,7 +123,7 @@ public abstract class NetworkTest {
                     line[3] = csv.get(3);
                     String correct = csv.get(4);
                     helper.normalizeInputVector(line,input.getData(),false);
-                    MLData output = bestMethod.compute(input);
+                    MLData output = regr.compute(input);
                     String irisChosen = helper.denormalizeOutputVectorToString(output)[0];
 
                     result.append(Arrays.toString(line));
@@ -145,15 +136,11 @@ public abstract class NetworkTest {
                     System.out.println(result.toString());
             }
 
-            // Delete data file ande shut down.
-            irisFile.delete();
             Encog.getInstance().shutdown();
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
     }
-
     
 }
