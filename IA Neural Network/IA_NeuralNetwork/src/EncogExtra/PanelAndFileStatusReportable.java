@@ -51,4 +51,13 @@ public class PanelAndFileStatusReportable implements StatusReportable{
         }
     }
     
+    public void print(String st){
+        CONSOLE_LOG.info(st);
+        try {
+            FILE_STREAM.write(st);
+        } catch (IOException ex) {
+            Logger.getLogger(PanelAndFileStatusReportable.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 }

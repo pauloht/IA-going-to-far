@@ -5,6 +5,7 @@
  */
 package NeuralNetworks;
 
+import EncogExtra.PanelAndFileStatusReportable;
 import java.io.File;
 import org.encog.ConsoleStatusReportable;
 import org.encog.StatusReportable;
@@ -14,16 +15,17 @@ import org.encog.StatusReportable;
  * @author JFPS
  */
 public class GenericConstraints extends NetworkTest{
-
+    private final PanelAndFileStatusReportable stRep;
     private final int crossK;
     private final double validationPercentage;
     
     
-    public GenericConstraints(File glassDataSet, double validationPercentage, int crossValidationK) {
+    public GenericConstraints(File glassDataSet, double validationPercentage, int crossValidationK, PanelAndFileStatusReportable stRep) {
         super(glassDataSet);
         
         this.crossK = crossValidationK;
         this.validationPercentage = validationPercentage;
+        this.stRep = stRep;
     }
 
     @Override
@@ -32,13 +34,15 @@ public class GenericConstraints extends NetworkTest{
     }
 
     @Override
-    StatusReportable getReport() {
-        return new ConsoleStatusReportable();
+    PanelAndFileStatusReportable getReport() {
+        return stRep;
     }
 
     @Override
     int crossValidationK() {
         return crossK;
     }
+
+
     
 }

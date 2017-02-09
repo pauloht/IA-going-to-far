@@ -5,12 +5,14 @@
  */
 package NeuralNetworks;
 
+import EncogExtra.PanelAndFileStatusReportable;
 import ia_neuralnetwork.Glass;
 import java.io.File;
 import java.util.Arrays;
 import org.encog.ConsoleStatusReportable;
 import org.encog.Encog;
 import org.encog.StatusReportable;
+import org.encog.engine.network.activation.ActivationSigmoid;
 import org.encog.ml.MLRegression;
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.versatile.NormalizationHelper;
@@ -23,7 +25,6 @@ import org.encog.ml.factory.MLMethodFactory;
 import org.encog.ml.model.EncogModel;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
-import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.util.csv.CSVFormat;
 import org.encog.util.csv.ReadCSV;
 import org.encog.util.simple.EncogUtility;
@@ -36,7 +37,8 @@ import org.encog.util.simple.EncogUtility;
 public abstract class NetworkTest {
     public static final int SEED_TO_SHUFFLE = 666;
     public static final boolean SHUFFLE_DATA = true;
-
+    public final BasicNetwork network = new BasicNetwork();
+    
     private final VersatileMLDataSet dataSet;
     private final File dataFile;
     
@@ -69,9 +71,16 @@ public abstract class NetworkTest {
     
     abstract double getValidationPercentage();
     
-    abstract StatusReportable getReport();
+    abstract PanelAndFileStatusReportable getReport();
     
     abstract int crossValidationK();
+    
+    //abstract PanelAndFileStatusReportable getR();
+    
+    private void print(String st){
+        System.out.println(st + "\n");
+        getReport().print(st + "\n");
+    }
     
     public void run(){
         try {
@@ -89,13 +98,13 @@ public abstract class NetworkTest {
 
                        
             // Display the training and validation errors.
-            System.out.println( "Training error: " + EncogUtility.calculateRegressionError(regr, model.getTrainingDataset()));
-            System.out.println( "Validation error: " + EncogUtility.calculateRegressionError(regr, model.getValidationDataset()));
+            print( "Training error: " + EncogUtility.calculateRegressionError(regr, model.getTrainingDataset()));
+            print( "Validation error: " + EncogUtility.calculateRegressionError(regr, model.getValidationDataset()));
 
             NormalizationHelper helper = dataSet.getNormHelper();
-            System.out.println(helper.toString());
+            print(helper.toString());
 
-            System.out.println("Final model: " + regr);
+            print("Final model: " + regr);
 
             ReadCSV csv = new ReadCSV(dataFile, false, CSVFormat.DECIMAL_POINT);
             String[] line = new String[10];
@@ -121,7 +130,7 @@ public abstract class NetworkTest {
                           .append("(").append(correct).append(").");
                     result.append(")");
 
-                    System.out.println(result.toString());
+                    print(result.toString());
             }
         } catch (NumberFormatException ex) {
             ex.printStackTrace();
@@ -129,6 +138,7 @@ public abstract class NetworkTest {
     }
     
     public void shutdown(){
+        print("SHUTING DOWN.\n\n\n\n\n\n");
         Encog.getInstance().shutdown();
     }
 }

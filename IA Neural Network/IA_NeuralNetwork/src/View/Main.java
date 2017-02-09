@@ -5,17 +5,31 @@
  */
 package View;
 
+import EncogExtra.PanelAndFileStatusReportable;
+import NeuralNetworks.FirstTest;
+import NeuralNetworks.SecondTest;
+import NeuralNetworks.ThirdTest;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author JFPS
  */
 public class Main extends javax.swing.JFrame {
-
+    private static final File FILE = new File("data/glass.csv");
+    private static final File FILEOUT = new File("data/glassOUT.txt");
+    private final PanelAndFileStatusReportable StRep;
+    
     /**
      * Creates new form Main
+     * @throws java.io.IOException
      */
-    public Main() {
+    public Main() throws IOException {
         initComponents();
+        StRep = new PanelAndFileStatusReportable(PANE, FILEOUT);
     }
 
     /**
@@ -28,13 +42,13 @@ public class Main extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        PANE = new javax.swing.JTextPane();
+        SecondTestB = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        FirstTestB = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -42,13 +56,13 @@ public class Main extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
+        ThirdTestB = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
-        jButton5 = new javax.swing.JButton();
+        GenericTestB = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -56,7 +70,7 @@ public class Main extends javax.swing.JFrame {
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
-        jButton6 = new javax.swing.JButton();
+        FirstResilientB = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jLabel33 = new javax.swing.JLabel();
         jLabel34 = new javax.swing.JLabel();
@@ -64,7 +78,7 @@ public class Main extends javax.swing.JFrame {
         jLabel36 = new javax.swing.JLabel();
         jLabel37 = new javax.swing.JLabel();
         jLabel38 = new javax.swing.JLabel();
-        jButton8 = new javax.swing.JButton();
+        SecondResilientB = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         jPanel12 = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
@@ -79,37 +93,35 @@ public class Main extends javax.swing.JFrame {
         jCheckBox1 = new javax.swing.JCheckBox();
         jCheckBox3 = new javax.swing.JCheckBox();
         jCheckBox4 = new javax.swing.JCheckBox();
-        jButton1 = new javax.swing.JButton();
+        GenericResilientB = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Saída"));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        jScrollPane1.setViewportView(PANE);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2)
-                .addContainerGap())
+            .addComponent(jScrollPane1)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
         );
 
         jLabel1.setText("Validation Percentage: 30%");
 
         jLabel2.setText("CrossValidation K: 5");
 
-        jButton2.setText("Go!");
+        FirstTestB.setText("Go!");
+        FirstTestB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                FirstTestBActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -124,7 +136,7 @@ public class Main extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 477, Short.MAX_VALUE)
-                        .addComponent(jButton2)))
+                        .addComponent(FirstTestB)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -137,17 +149,22 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
+                .addComponent(FirstTestB)
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("FirstTest", jPanel2);
+        SecondTestB.addTab("FirstTest", jPanel2);
 
         jLabel3.setText("Validation Percentage: 15%");
 
         jLabel4.setText("CrossValidation K: 3");
 
         jButton3.setText("Go!");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -178,13 +195,18 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(jButton3))
         );
 
-        jTabbedPane1.addTab("SecondTest", jPanel3);
+        SecondTestB.addTab("SecondTest", jPanel3);
 
         jLabel5.setText("Validation Percentage: 50%");
 
         jLabel6.setText("CrossValidation K: 15");
 
-        jButton4.setText("Go!");
+        ThirdTestB.setText("Go!");
+        ThirdTestB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ThirdTestBActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -199,7 +221,7 @@ public class Main extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 477, Short.MAX_VALUE)
-                        .addComponent(jButton4)))
+                        .addComponent(ThirdTestB)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -212,17 +234,17 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton4)
+                .addComponent(ThirdTestB)
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("ThirdTest", jPanel4);
+        SecondTestB.addTab("ThirdTest", jPanel4);
 
         jLabel7.setText("Validation Percentage: ");
 
         jLabel8.setText("CrossValidation K:");
 
-        jButton5.setText("Go!");
+        GenericTestB.setText("Go!");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -238,7 +260,7 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
                     .addComponent(jTextField2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 386, Short.MAX_VALUE)
-                .addComponent(jButton5)
+                .addComponent(GenericTestB)
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -255,10 +277,10 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton5))
+                .addComponent(GenericTestB))
         );
 
-        jTabbedPane1.addTab("GenericTest", jPanel5);
+        SecondTestB.addTab("GenericTest", jPanel5);
 
         jLabel9.setText("Neurônios Saída: x");
 
@@ -272,7 +294,7 @@ public class Main extends javax.swing.JFrame {
 
         jLabel14.setText("Bias na oculta? Sim.");
 
-        jButton6.setText("Go!");
+        FirstResilientB.setText("Go!");
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -292,7 +314,7 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
                     .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 206, Short.MAX_VALUE)
-                .addComponent(jButton6)
+                .addComponent(FirstResilientB)
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
@@ -311,10 +333,10 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap(23, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton6))
+                .addComponent(FirstResilientB))
         );
 
-        jTabbedPane1.addTab("FirstResilient", jPanel6);
+        SecondTestB.addTab("FirstResilient", jPanel6);
 
         jLabel33.setText("Neurônios de Entrada: x");
 
@@ -328,7 +350,7 @@ public class Main extends javax.swing.JFrame {
 
         jLabel38.setText("Bias na saída? Não.");
 
-        jButton8.setText("Go!");
+        SecondResilientB.setText("Go!");
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -348,7 +370,7 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jLabel38, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel37, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 206, Short.MAX_VALUE)
-                .addComponent(jButton8)
+                .addComponent(SecondResilientB)
                 .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
@@ -367,10 +389,10 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap(23, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton8))
+                .addComponent(SecondResilientB))
         );
 
-        jTabbedPane1.addTab("Second Resilient", jPanel8);
+        SecondTestB.addTab("Second Resilient", jPanel8);
 
         jLabel27.setText("Neurônios Saída:");
 
@@ -384,7 +406,7 @@ public class Main extends javax.swing.JFrame {
 
         jLabel32.setText("Bias na oculta?");
 
-        jButton1.setText("Go!");
+        GenericResilientB.setText("Go!");
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
@@ -419,7 +441,7 @@ public class Main extends javax.swing.JFrame {
                     .addGroup(jPanel12Layout.createSequentialGroup()
                         .addComponent(jCheckBox4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 111, Short.MAX_VALUE)
-                        .addComponent(jButton1))))
+                        .addComponent(GenericResilientB))))
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -446,7 +468,7 @@ public class Main extends javax.swing.JFrame {
                 .addGap(7, 7, 7))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton1))
+                .addComponent(GenericResilientB))
         );
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
@@ -466,7 +488,7 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("GenericResilient", jPanel9);
+        SecondTestB.addTab("GenericResilient", jPanel9);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -477,14 +499,14 @@ public class Main extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jTabbedPane1)
+                        .addComponent(SecondTestB)
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(SecondTestB, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -492,6 +514,27 @@ public class Main extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void FirstTestBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FirstTestBActionPerformed
+        PANE.setText(null);
+        FirstTest t = new FirstTest(FILE, StRep);
+        t.run();
+        t.shutdown();
+    }//GEN-LAST:event_FirstTestBActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        PANE.setText(null);
+        SecondTest t = new SecondTest(FILE, StRep);
+        t.run();
+        t.shutdown();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void ThirdTestBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ThirdTestBActionPerformed
+        PANE.setText(null);
+        ThirdTest t = new ThirdTest(FILE, StRep);
+        t.run();
+        t.shutdown();
+    }//GEN-LAST:event_ThirdTestBActionPerformed
 
     /**
      * @param args the command line arguments
@@ -523,19 +566,25 @@ public class Main extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Main().setVisible(true);
+                try {
+                    new Main().setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton FirstResilientB;
+    private javax.swing.JButton FirstTestB;
+    private javax.swing.JButton GenericResilientB;
+    private javax.swing.JButton GenericTestB;
+    private javax.swing.JTextPane PANE;
+    private javax.swing.JButton SecondResilientB;
+    private javax.swing.JTabbedPane SecondTestB;
+    private javax.swing.JButton ThirdTestB;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton8;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JCheckBox jCheckBox4;
@@ -574,12 +623,10 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JSpinner jSpinner2;
     private javax.swing.JSpinner jSpinner3;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables

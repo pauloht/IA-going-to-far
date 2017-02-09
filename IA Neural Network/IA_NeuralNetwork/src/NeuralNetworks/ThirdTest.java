@@ -5,6 +5,7 @@
  */
 package NeuralNetworks;
 
+import EncogExtra.PanelAndFileStatusReportable;
 import java.io.File;
 import org.encog.ConsoleStatusReportable;
 import org.encog.StatusReportable;
@@ -14,25 +15,27 @@ import org.encog.StatusReportable;
  * @author JFPS
  */
 public final class ThirdTest extends NetworkTest{
-   
-    public ThirdTest(File data) {
+    private final PanelAndFileStatusReportable stRep;
+       
+    public ThirdTest(File data, PanelAndFileStatusReportable stRep) {
         super(data);
+        this.stRep = stRep;
     }
 
     @Override
     double getValidationPercentage() {
-        return 0.4;
+        return 0.2;
     }
 
     @Override
-    StatusReportable getReport() {
-        return new ConsoleStatusReportable();
+    PanelAndFileStatusReportable getReport() {
+        return stRep;
     }
 
     @Override
     int crossValidationK() {
-        return 8;
+        return 3;
     }
-    
+   
     
 }

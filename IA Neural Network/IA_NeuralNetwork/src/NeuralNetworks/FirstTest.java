@@ -5,17 +5,20 @@
  */
 package NeuralNetworks;
 
+import EncogExtra.PanelAndFileStatusReportable;
 import java.io.File;
-import org.encog.ConsoleStatusReportable;
 import org.encog.StatusReportable;
 
 /**
  *
  * @author JFPS
  */
-public final class FirstTest extends NetworkTest{   
-    public FirstTest(File data) {
+public final class FirstTest extends NetworkTest{ 
+    private final PanelAndFileStatusReportable stRep;
+    
+    public FirstTest(File data, PanelAndFileStatusReportable rep) {
         super(data);
+        this.stRep = rep;
     }
 
     @Override
@@ -24,14 +27,12 @@ public final class FirstTest extends NetworkTest{
     }
 
     @Override
-    StatusReportable getReport() {
-        return new ConsoleStatusReportable();
+    PanelAndFileStatusReportable getReport() {
+        return stRep;
     }
 
     @Override
     int crossValidationK() {
         return 5;
-    }
-    
-    
+    }   
 }
