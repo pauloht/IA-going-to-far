@@ -5,6 +5,8 @@
  */
 package ia_neuralnetwork;
 
+import NeuralNetworks.FirstTest;
+import NeuralNetworks.SecondTest;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.concurrent.ThreadLocalRandom;
@@ -127,7 +129,7 @@ public class IA_NeuralNetwork {
     public static void main(String[] args) throws FileNotFoundException {
         
         File data = new File("data/glass.csv");
-        FirstTest teste = new FirstTest(data);
+        SecondTest teste = new SecondTest(data);
         teste.run();
     }
     

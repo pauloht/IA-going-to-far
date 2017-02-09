@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ia_neuralnetwork;
+package NeuralNetworks.Resilient;
 
+import NeuralNetworks.*;
 import java.io.Console;
 import java.io.File;
 import org.encog.ConsoleStatusReportable;
@@ -17,7 +18,7 @@ import org.encog.neural.networks.layers.BasicLayer;
  *
  * @author JFPS
  */
-public final class FirstTest extends NetworkTest{
+public final class FirstResilient extends NetworkTestResilient{
     /*
     Neste teste, a "Hidden Layer" possuirá o número de neurônios
     igual a média entre o número de entradas e saídas, como a maioria 
@@ -35,11 +36,10 @@ public final class FirstTest extends NetworkTest{
     Saída   - 7.
     */
     
-    private static final int ENTRADA=9;
     private static final int OCULTA=8;
     private static final int SAIDA=7;
     
-    public FirstTest(File data) {
+    public FirstResilient(File data) {
         super(data);
         
         BasicLayer entrada = new BasicLayer(null, true, ENTRADA);
@@ -47,22 +47,6 @@ public final class FirstTest extends NetworkTest{
         BasicLayer saida   = new BasicLayer(new ActivationSigmoid(), false, SAIDA);
         
         super.setLayers(entrada, oculta, saida);
-    }
-
-    @Override
-    double getValidationPercentage() {
-        return 0.3;
-    }
-
-    @Override
-    StatusReportable getReport() {
-        return new ConsoleStatusReportable();
-    }
-
-    @Override
-    int crossValidationK() {
-        return 5;
-    }
-    
+    } 
     
 }

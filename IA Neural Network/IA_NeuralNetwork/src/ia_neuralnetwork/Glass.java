@@ -59,4 +59,18 @@ public enum Glass {
         }
         throw new IllegalArgumentException("UndNome inválido.");
     }
+
+    public int getID() {
+        return ID;
+    }
+
+    public String getUndNome() {
+        return undNome;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+    
+    
 }

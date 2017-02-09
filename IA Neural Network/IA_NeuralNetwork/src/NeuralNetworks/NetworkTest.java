@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ia_neuralnetwork;
+package NeuralNetworks;
 
+import ia_neuralnetwork.Glass;
 import java.io.File;
 import java.util.Arrays;
 import org.encog.ConsoleStatusReportable;
@@ -22,6 +23,7 @@ import org.encog.ml.factory.MLMethodFactory;
 import org.encog.ml.model.EncogModel;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
+import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.util.csv.CSVFormat;
 import org.encog.util.csv.ReadCSV;
 import org.encog.util.simple.EncogUtility;
@@ -34,8 +36,7 @@ import org.encog.util.simple.EncogUtility;
 public abstract class NetworkTest {
     public static final int SEED_TO_SHUFFLE = 666;
     public static final boolean SHUFFLE_DATA = true;
-    
-    private final BasicNetwork network;
+
     private final VersatileMLDataSet dataSet;
     private final File dataFile;
     
@@ -62,17 +63,8 @@ public abstract class NetworkTest {
     }
     
     protected NetworkTest(File glassDataSet) {
-        this.network = new BasicNetwork();
         dataFile = glassDataSet;
         dataSet = defineSource(glassDataSet);
-    }
-    
-    protected void setLayers(BasicLayer input, BasicLayer hidden, BasicLayer output){
-        network.addLayer(input);
-        network.addLayer(hidden);
-        network.addLayer(output);
-        network.getStructure().finalizeStructure();
-        network.reset();
     }
     
     abstract double getValidationPercentage();
@@ -85,13 +77,14 @@ public abstract class NetworkTest {
         try {
             EncogModel model = new EncogModel(dataSet);
             model.selectMethod(dataSet, MLMethodFactory.TYPE_FEEDFORWARD);
-
+            
             //model.setReport(new ConsoleStatusReportable());
             model.setReport(getReport());
             dataSet.normalize();
 
             model.holdBackValidation(getValidationPercentage(), SHUFFLE_DATA, SEED_TO_SHUFFLE);
             model.selectTrainingType(dataSet);
+            //MLRegression regr = (MLRegression)model.
             MLRegression regr = (MLRegression)model.crossvalidate(crossValidationK(), SHUFFLE_DATA);
 
                        
@@ -130,12 +123,12 @@ public abstract class NetworkTest {
 
                     System.out.println(result.toString());
             }
-
-            Encog.getInstance().shutdown();
-
-        } catch (Exception ex) {
+        } catch (NumberFormatException ex) {
             ex.printStackTrace();
         }
     }
     
+    public void shutdown(){
+        Encog.getInstance().shutdown();
+    }
 }
