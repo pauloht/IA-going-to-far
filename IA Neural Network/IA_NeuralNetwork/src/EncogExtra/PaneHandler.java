@@ -8,7 +8,6 @@ package EncogExtra;
 import java.util.logging.Formatter;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
-import java.util.logging.SimpleFormatter;
 import java.util.logging.StreamHandler;
 
 /**
@@ -24,7 +23,7 @@ public class PaneHandler extends StreamHandler {
      * @param outStream Stream já instanciada.
      */
     public PaneHandler(BufferedPaneOutputStream outStream) {
-        this(outStream, new SimpleFormatter());
+        this(outStream, new ConsoleFormatter());
     }
 
     /**
