@@ -24,7 +24,7 @@ public final class ThirdTest extends NetworkTest{
 
     @Override
     double getValidationPercentage() {
-        return 0.2;
+        return 0.5;
     }
 
     @Override
@@ -34,7 +34,7 @@ public final class ThirdTest extends NetworkTest{
 
     @Override
     int crossValidationK() {
-        return 3;
+        return 15;
     }
    
     

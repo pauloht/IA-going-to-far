@@ -7,6 +7,7 @@ package View;
 
 import EncogExtra.PanelAndFileStatusReportable;
 import NeuralNetworks.FirstTest;
+import NeuralNetworks.GenericConstraints;
 import NeuralNetworks.SecondTest;
 import NeuralNetworks.ThirdTest;
 import java.io.File;
@@ -60,8 +61,8 @@ public class Main extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        percent = new javax.swing.JTextField();
+        k = new javax.swing.JTextField();
         GenericTestB = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
@@ -245,6 +246,11 @@ public class Main extends javax.swing.JFrame {
         jLabel8.setText("CrossValidation K:");
 
         GenericTestB.setText("Go!");
+        GenericTestB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GenericTestBActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -257,8 +263,8 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
-                    .addComponent(jTextField2))
+                    .addComponent(percent, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
+                    .addComponent(k))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 386, Short.MAX_VALUE)
                 .addComponent(GenericTestB)
                 .addContainerGap())
@@ -269,11 +275,11 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(percent, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
-                    .addComponent(jTextField2))
+                    .addComponent(k))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -536,6 +542,17 @@ public class Main extends javax.swing.JFrame {
         t.shutdown();
     }//GEN-LAST:event_ThirdTestBActionPerformed
 
+    private void GenericTestBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenericTestBActionPerformed
+        PANE.setText(null);
+
+        double validation = Double.parseDouble(percent.getText());
+        int KVALUE = Integer.parseInt(k.getText());
+
+        GenericConstraints t = new GenericConstraints(FILE, validation, KVALUE, StRep);
+        t.run();
+        t.shutdown();
+    }//GEN-LAST:event_GenericTestBActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -627,7 +644,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JSpinner jSpinner2;
     private javax.swing.JSpinner jSpinner3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField k;
+    private javax.swing.JTextField percent;
     // End of variables declaration//GEN-END:variables
 }

@@ -24,7 +24,7 @@ public final class SecondTest extends NetworkTest{
 
     @Override
     double getValidationPercentage() {
-        return 0.4;
+        return 0.15;
     }
 
     @Override
@@ -34,7 +34,7 @@ public final class SecondTest extends NetworkTest{
 
     @Override
     int crossValidationK() {
-        return 8;
+        return 3;
     }
 
     
