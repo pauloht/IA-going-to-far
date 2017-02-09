@@ -126,11 +126,9 @@ public class IA_NeuralNetwork {
      */
     public static void main(String[] args) throws FileNotFoundException {
         
-        
-        
-        
-        
-        
+        File data = new File("data/glass.csv");
+        FirstTest teste = new FirstTest(data);
+        teste.run();
     }
     
 }

@@ -81,7 +81,7 @@ public abstract class NetworkTest {
     
     abstract int crossValidationK();
     
-    protected void run(){
+    public void run(){
         try {
             EncogModel model = new EncogModel(dataSet);
             model.selectMethod(dataSet, MLMethodFactory.TYPE_FEEDFORWARD);
@@ -99,38 +99,33 @@ public abstract class NetworkTest {
             System.out.println( "Training error: " + EncogUtility.calculateRegressionError(regr, model.getTrainingDataset()));
             System.out.println( "Validation error: " + EncogUtility.calculateRegressionError(regr, model.getValidationDataset()));
 
-            // Display our normalization parameters.
             NormalizationHelper helper = dataSet.getNormHelper();
             System.out.println(helper.toString());
 
-            // Display the final model.
             System.out.println("Final model: " + regr);
 
-            // Loop over the entire, original, dataset and feed it through the model.
-            // This also shows how you would process new data, that was not part of your
-            // training set.  You do not need to retrain, simply use the NormalizationHelper
-            // class.  After you train, you can save the NormalizationHelper to later
-            // normalize and denormalize your data.
             ReadCSV csv = new ReadCSV(dataFile, false, CSVFormat.DECIMAL_POINT);
-            String[] line = new String[4];
+            String[] line = new String[10];
             MLData input = helper.allocateInputVector();
 
             while(csv.next()) {
                     StringBuilder result = new StringBuilder();
-                    line[0] = csv.get(0);
-                    line[1] = csv.get(1);
-                    line[2] = csv.get(2);
-                    line[3] = csv.get(3);
-                    String correct = csv.get(4);
+                    for (int i=0; i<line.length; i++){
+                        line[i] = csv.get(i+1);
+                    }
+                    
+                    String correct = csv.get(10);
                     helper.normalizeInputVector(line,input.getData(),false);
                     MLData output = regr.compute(input);
-                    String irisChosen = helper.denormalizeOutputVectorToString(output)[0];
+                    String glass = helper.denormalizeOutputVectorToString(output)[0];
 
                     result.append(Arrays.toString(line));
-                    result.append(" -> predicted: ");
-                    result.append(irisChosen);
-                    result.append("(correct: ");
-                    result.append(correct);
+                    result.append(" -> previsto: ");
+                    result.append(Glass.viaID(Integer.parseInt(glass)).getNome())
+                          .append("(").append(glass).append(").");
+                    result.append(" -> correto(Do Dataset): ");
+                    result.append(Glass.viaID(Integer.parseInt(correct)).getNome())
+                          .append("(").append(correct).append(").");
                     result.append(")");
 
                     System.out.println(result.toString());

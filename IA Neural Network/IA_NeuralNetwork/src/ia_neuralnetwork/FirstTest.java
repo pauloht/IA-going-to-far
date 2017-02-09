@@ -5,6 +5,10 @@
  */
 package ia_neuralnetwork;
 
+import java.io.Console;
+import java.io.File;
+import org.encog.ConsoleStatusReportable;
+import org.encog.StatusReportable;
 import org.encog.engine.network.activation.ActivationSigmoid;
 import org.encog.engine.network.activation.ActivationSoftMax;
 import org.encog.neural.networks.layers.BasicLayer;
@@ -35,14 +39,29 @@ public final class FirstTest extends NetworkTest{
     private static final int OCULTA=8;
     private static final int SAIDA=7;
     
-    public FirstTest() {
-        super();
+    public FirstTest(File data) {
+        super(data);
         
         BasicLayer entrada = new BasicLayer(null, true, ENTRADA);
         BasicLayer oculta  = new BasicLayer(new ActivationSigmoid(), true, OCULTA);
-        BasicLayer saida   = new BasicLayer(new ActivationSoftMax(), false, SAIDA);
+        BasicLayer saida   = new BasicLayer(new ActivationSigmoid(), false, SAIDA);
         
         super.setLayers(entrada, oculta, saida);
+    }
+
+    @Override
+    double getValidationPercentage() {
+        return 0.3;
+    }
+
+    @Override
+    StatusReportable getReport() {
+        return new ConsoleStatusReportable();
+    }
+
+    @Override
+    int crossValidationK() {
+        return 5;
     }
     
     
