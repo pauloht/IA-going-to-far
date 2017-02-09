@@ -13,9 +13,9 @@ import org.encog.StatusReportable;
  *
  * @author JFPS
  */
-public final class SecondTest extends NetworkTest{
+public final class ThirdTest extends NetworkTest{
    
-    public SecondTest(File data) {
+    public ThirdTest(File data) {
         super(data);
     }
 
